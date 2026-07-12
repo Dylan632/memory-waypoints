@@ -29,3 +29,7 @@ npm run build
 ```
 
 Vercel 会自动识别 Vite，并发布 `dist/`。
+
+## 自动部署
+
+GitHub `main` 分支已连接 Vercel。每次更新主分支后，线上网站会自动重新构建并发布。
