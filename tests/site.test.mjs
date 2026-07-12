@@ -14,3 +14,11 @@ test("production build contains the memory story and no starter UI", async () =>
   assert.match(script, /打开回忆/);
   assert.doesNotMatch(`${html}${script}`, /Your site is taking shape|codex-preview|SkeletonPreview/);
 });
+
+test("mobile tickets are capped to the viewport and recentered", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const mobileRules = css.slice(css.indexOf("@media (max-width: 760px)"), css.indexOf("@media (max-width: 430px)"));
+
+  assert.match(mobileRules, /\.ticket-slot\s*\{[^}]*width:\s*min\(var\(--ticket-width\),\s*calc\(100vw - 32px\)\)/s);
+  assert.match(mobileRules, /\.ticket-slot\s*\{[^}]*margin-inline:\s*auto/s);
+});
