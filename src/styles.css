@@ -141,7 +141,7 @@ button { color: inherit; }
   .trip-header h2 { font-size: 28px; }
   .trip-header p { font-size: 12px; }
   .ticket-stack { gap: 76px; }
-  .ticket-slot { margin-left: calc(50% - (var(--ticket-width) / 2) + (var(--ticket-offset) * .55)); }
+  .ticket-slot { width: min(var(--ticket-width), calc(100vw - 32px)); max-width: calc(100vw - 32px); margin-inline: auto; }
   .ticket-button { will-change: auto; }
   .ticket-label { display: none; }
   .trip-transition { min-height: 310px; }
