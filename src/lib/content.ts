@@ -1,4 +1,4 @@
-import type { TicketVariant, Trip } from "../data.js";
+import type { TicketTemplateVariant, TicketVariant, Trip } from "../data.js";
 import type { Coordinate } from "./trips.js";
 
 type JsonRecord = Record<string, unknown>;
@@ -95,6 +95,11 @@ function validateTicket(value: unknown, path: string, ticketIds: Set<string>): v
   if (typeof ticket.variant !== "string" || !VARIANTS.has(ticket.variant as TicketVariant)) {
     fail(`${path}.variant`, "is not a supported ticket variant");
   }
+  if (ticket.templateVariant !== undefined && (
+    typeof ticket.templateVariant !== "string" ||
+    ticket.templateVariant === "scan" ||
+    !VARIANTS.has(ticket.templateVariant as TicketTemplateVariant)
+  )) fail(`${path}.templateVariant`, "is not a supported template variant");
   for (const field of ["subtitle", "serial", "price"] as const) {
     if (typeof ticket[field] !== "string") fail(`${path}.${field}`, "must be a string");
     if (ticket.variant !== "scan") text(ticket[field], `${path}.${field}`);

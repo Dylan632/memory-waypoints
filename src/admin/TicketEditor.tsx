@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from "react";
-import type { Ticket, TicketVariant } from "../data";
+import { switchTicketMode, type Ticket, type TicketTemplateVariant } from "../data";
 import { uploadImage } from "./media";
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
   disabled?: boolean;
 };
 
-const templateVariants: Array<{ value: TicketVariant; label: string }> = [
+const templateVariants: Array<{ value: TicketTemplateVariant; label: string }> = [
   { value: "scenic", label: "风景票" },
   { value: "rail", label: "车票" },
   { value: "museum", label: "展览票" },
@@ -47,7 +47,7 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
     setMessage("正在上传票根…");
     try {
       const image = await uploadImage(file, "tickets");
-      onChange(ticketId, (current) => ({ ...current, variant: "scan", image: image.url, ratio: Math.min(3.5, Math.max(.65, image.ratio)) }));
+      onChange(ticketId, (current) => ({ ...switchTicketMode(current, "scan"), image: image.url, ratio: Math.min(3.5, Math.max(.65, image.ratio)) }));
       setMessage("票根已上传并保存到草稿");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "票根上传失败");
@@ -128,7 +128,7 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
       <div className="ticket-media-row">
         <div>
           <span className="admin-label">票根图像</span>
-          <p>{ticket.variant === "scan" ? "当前使用真实票根图片" : "上传后会自动切换为真实票根"}</p>
+          <p>{ticket.variant === "scan" ? "当前使用真实票根图片" : ticket.image ? "图片已保留，可随时切换回来" : "上传后会自动切换为真实票根"}</p>
         </div>
         <label className={`admin-upload-button${busy === "ticket" ? " is-busy" : ""}`}>
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTicket} disabled={Boolean(busy) || disabled} />
@@ -136,10 +136,19 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
         </label>
       </div>
 
-      {ticket.variant !== "scan" && <div className="admin-field-grid admin-appearance-fields">
-        <label className="admin-field"><span>票根样式</span><select value={ticket.variant} onChange={(event) => update("variant", event.target.value as TicketVariant)}>{templateVariants.map((variant) => <option key={variant.value} value={variant.value}>{variant.label}</option>)}</select></label>
-        <label className="admin-field"><span>强调色</span><div className="admin-color-field"><input type="color" value={ticket.accent} onChange={(event) => update("accent", event.target.value)} /><code>{ticket.accent}</code></div></label>
-      </div>}
+      <div className="admin-field-grid admin-appearance-fields">
+        <label className="admin-field"><span>显示方式</span><select value={ticket.variant === "scan" ? "scan" : "template"} onChange={(event) => onChange(ticket.id, (current) => switchTicketMode(current, event.target.value as "scan" | "template"))}>
+          <option value="scan" disabled={!ticket.image}>真实票根照片</option>
+          <option value="template">样式票根</option>
+        </select></label>
+        {ticket.variant !== "scan" && <>
+          <label className="admin-field"><span>票根样式</span><select value={ticket.variant} onChange={(event) => {
+            const variant = event.target.value as TicketTemplateVariant;
+            onChange(ticket.id, (current) => ({ ...current, variant, templateVariant: variant }));
+          }}>{templateVariants.map((variant) => <option key={variant.value} value={variant.value}>{variant.label}</option>)}</select></label>
+          <label className="admin-field"><span>强调色</span><div className="admin-color-field"><input type="color" value={ticket.accent} onChange={(event) => update("accent", event.target.value)} /><code>{ticket.accent}</code></div></label>
+        </>}
+      </div>
 
       <details className="admin-layout-details">
         <summary>调整票根位置和大小</summary>

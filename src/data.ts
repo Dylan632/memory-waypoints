@@ -1,6 +1,7 @@
 import type { Coordinate } from "./lib/trips.js";
 
 export type TicketVariant = "scenic" | "rail" | "museum" | "cinema" | "scan";
+export type TicketTemplateVariant = Exclude<TicketVariant, "scan">;
 
 export type Ticket = {
   id: string;
@@ -10,6 +11,7 @@ export type Ticket = {
   date: string;
   price: string;
   variant: TicketVariant;
+  templateVariant?: TicketTemplateVariant;
   accent: string;
   width: number;
   ratio: number;
@@ -19,6 +21,11 @@ export type Ticket = {
   story: string;
   photos: string[];
 };
+
+export function switchTicketMode(ticket: Ticket, mode: "scan" | "template"): Ticket {
+  const templateVariant = ticket.variant === "scan" ? ticket.templateVariant ?? "museum" : ticket.variant;
+  return { ...ticket, templateVariant, variant: mode === "scan" ? "scan" : templateVariant };
+}
 
 export type Trip = {
   id: string;

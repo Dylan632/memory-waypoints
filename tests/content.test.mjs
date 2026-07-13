@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { switchTicketMode } from "../src/data.ts";
 import { loadPublishedTrips, parseRouteText, validateTrips } from "../src/lib/content.ts";
 
 const validTrips = [
@@ -46,6 +47,16 @@ test("validateTrips accepts a complete trip including scanned tickets", () => {
   assert.doesNotThrow(() => validateTrips(scanWithoutTemplateMetadata));
 });
 
+test("ticket photos can switch back to their previous template style", () => {
+  const template = { ...validTrips[0].tickets[0], variant: "scenic" };
+  const scanned = switchTicketMode(template, "scan");
+
+  assert.equal(scanned.variant, "scan");
+  assert.equal(scanned.templateVariant, "scenic");
+  assert.equal(switchTicketMode(scanned, "template").variant, "scenic");
+  assert.equal(switchTicketMode({ ...scanned, templateVariant: undefined }, "template").variant, "museum");
+});
+
 test("validateTrips rejects empty, unsafe, duplicate, and malformed content", () => {
   assert.throws(() => validateTrips([]), /at least one trip/i);
   assert.throws(() => validateTrips(null), /array/i);
@@ -88,6 +99,10 @@ test("validateTrips rejects empty, unsafe, duplicate, and malformed content", ()
   const missingScan = clone();
   delete missingScan[0].tickets[0].image;
   assert.throws(() => validateTrips(missingScan), /image/i);
+
+  const badTemplateVariant = clone();
+  badTemplateVariant[0].tickets[0].templateVariant = "scan";
+  assert.throws(() => validateTrips(badTemplateVariant), /templateVariant/i);
 
   const stationaryRoute = clone();
   stationaryRoute[0].route = [[120.13, 30.25], [120.13, 30.25]];
