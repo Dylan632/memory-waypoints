@@ -12,9 +12,18 @@ test("production build contains the memory story and no starter UI", async () =>
   assert.match(html, /我们的旅行坐标/);
   assert.match(script, /海边的周末/);
   assert.match(script, /打开回忆/);
-  assert.match(script, /spotify:track:3ikk4wT6AIhOCtXBsZd0YO/);
-  assert.match(script, /点击开启背景音乐/);
+  assert.match(script, /audio\/moonlight\.mp3/);
+  assert.match(script, /暂停背景音乐《Moonlight》/);
+  assert.match(script, /Scott Buckley/);
+  assert.doesNotMatch(script, /spotify:track:|点击开启背景音乐/);
   assert.doesNotMatch(`${html}${script}`, /Your site is taking shape|codex-preview|SkeletonPreview/);
+});
+
+test("production build ships the complete local soundtrack", async () => {
+  const app = await readFile(new URL("../src/App.tsx", import.meta.url), "utf8");
+  const audio = await readFile(new URL("../dist/audio/moonlight.mp3", import.meta.url));
+  assert.match(app, /<audio[^>]*autoPlay[^>]*loop[^>]*>/);
+  assert.ok(audio.byteLength > 9_000_000, "expected the full Moonlight MP3");
 });
 
 test("mobile tickets are capped to the viewport and recentered", async () => {
