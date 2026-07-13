@@ -7,7 +7,7 @@ import { Notebook } from "./components/Notebook";
 import { Ticket, type TicketSelection } from "./components/Ticket";
 
 const AdminApp = lazy(() => import("./admin/AdminApp").then((module) => ({ default: module.AdminApp })));
-const SOUNDTRACK_URL = "/audio/moonlight.mp3";
+const QQ_MUSIC_PLAYER_URL = "https://i.y.qq.com/n2/m/outchain/player/index.html?songid=101819133&songtype=0";
 
 export function App() {
   if (window.location.pathname.startsWith("/admin")) return <Suspense fallback={<main className="admin-loading"><span aria-hidden="true">⌖</span><p>正在打开旅行管理台</p></main>}><AdminApp fallbackTrips={bundledTrips} /></Suspense>;
@@ -60,7 +60,7 @@ function StoryApp() {
     <a className="skip-link" href="#story">跳到旅行记录</a>
     <MemoryMap trip={activeTrip} />
     <div ref={scrollRef} className={`story-scroll${selection ? " has-dialog" : ""}`} inert={selection ? true : undefined} aria-hidden={selection ? true : undefined}>
-      <BackgroundSoundtrack />
+      <QQMusicSoundtrack />
       <main id="story" className="story-inner">
         <header className="site-intro">
           <p className="intro-index">TWO PEOPLE · ONE MAP</p>
@@ -91,7 +91,7 @@ function StoryApp() {
           <span>TO BE CONTINUED</span>
           <h2>下一站，仍然是一起。</h2>
           <p>把照片和票根替换成你们自己的故事。</p>
-          <p className="music-credit">背景音乐 “Moonlight” · <a href="https://www.scottbuckley.com.au/library/moonlight/" target="_blank" rel="noreferrer">Scott Buckley</a> · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a></p>
+          <p className="music-credit">背景音乐 “To April” · <a href={QQ_MUSIC_PLAYER_URL} target="_blank" rel="noreferrer">QQ 音乐官方播放器</a></p>
         </footer>
       </main>
     </div>
@@ -99,49 +99,13 @@ function StoryApp() {
   </>;
 }
 
-function BackgroundSoundtrack() {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    let active = true;
-    audio.volume = .24;
-    const syncPlaying = () => setPlaying(!audio.paused);
-    const resume = (event: Event) => {
-      window.removeEventListener("pointerup", resume, true);
-      window.removeEventListener("keydown", resume, true);
-      if (event.target instanceof Element && event.target.closest(".soundtrack-toggle")) return;
-      void audio.play().catch(() => undefined);
-    };
-    audio.addEventListener("play", syncPlaying);
-    audio.addEventListener("pause", syncPlaying);
-    void audio.play().catch(() => {
-      if (!active) return;
-      window.addEventListener("pointerup", resume, { capture: true, once: true });
-      window.addEventListener("keydown", resume, { capture: true, once: true });
-    });
-    return () => {
-      active = false;
-      audio.removeEventListener("play", syncPlaying);
-      audio.removeEventListener("pause", syncPlaying);
-      window.removeEventListener("pointerup", resume, true);
-      window.removeEventListener("keydown", resume, true);
-    };
-  }, []);
-
-  function toggle() {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (audio.paused) void audio.play().catch(() => undefined);
-    else audio.pause();
-  }
-
-  return <>
-    <audio ref={audioRef} src={SOUNDTRACK_URL} autoPlay loop playsInline preload="auto" />
-    <button type="button" className="soundtrack-toggle" aria-label={playing ? "暂停背景音乐《Moonlight》" : "播放背景音乐《Moonlight》"} aria-pressed={playing} onClick={toggle}>
-      <span aria-hidden="true">{playing ? "Ⅱ" : "♪"}</span>
-    </button>
-  </>;
+function QQMusicSoundtrack() {
+  return <aside className="qq-soundtrack" aria-label="QQ 音乐背景音乐《To April》">
+    <iframe
+      src={QQ_MUSIC_PLAYER_URL}
+      title="QQ 音乐播放器：《To April》—高姗"
+      allow="autoplay; encrypted-media"
+      loading="eager"
+    />
+  </aside>;
 }

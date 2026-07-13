@@ -56,9 +56,8 @@ button { color: inherit; }
 .sort-toggle button:active { transform: scale(.96); }
 .sort-toggle button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
-.soundtrack-toggle { position: fixed; z-index: 900; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); width: 42px; height: 42px; padding: 0; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.18); border-radius: 50%; color: #fff; background: rgba(20,22,22,.72); box-shadow: 0 8px 24px rgba(0,0,0,.28); backdrop-filter: blur(12px); cursor: pointer; }
-.soundtrack-toggle span { font: 600 16px/1 Inter,sans-serif; }
-.soundtrack-toggle:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.qq-soundtrack { position: fixed; z-index: 900; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); width: min(320px, calc(100vw - 32px)); overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 12px; background: rgba(20,22,22,.72); box-shadow: 0 8px 24px rgba(0,0,0,.28); backdrop-filter: blur(12px); }
+.qq-soundtrack iframe { display: block; width: 100%; height: 84px; border: 0; }
 
 .trip-block { position: relative; }
 .trip-section { position: relative; padding: 0 24px; }
@@ -138,7 +137,7 @@ button { color: inherit; }
 @media (max-width: 760px) {
   .map-caption { display: none; }
   .story-scroll::-webkit-scrollbar { width: 4px; }
-  .soundtrack-toggle { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
+  .qq-soundtrack { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); width: min(320px, calc(100vw - 24px)); }
   .story-inner { width: calc(100vw - 15px); }
   .site-intro { min-height: 500px; padding: 21vh 20px 50px; }
   .intro-index { margin-bottom: 14px; }
