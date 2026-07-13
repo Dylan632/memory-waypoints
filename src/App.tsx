@@ -24,7 +24,11 @@ function StoryApp() {
 
   useEffect(() => {
     let current = true;
-    void loadPublishedTrips(bundledTrips).then((published) => { if (current) setTrips(published); });
+    void loadPublishedTrips(bundledTrips).then((published) => {
+      if (!current) return;
+      setTrips(published);
+      setActiveId(sortTrips(published, "newest")[0].id);
+    });
     return () => { current = false; };
   }, []);
 
