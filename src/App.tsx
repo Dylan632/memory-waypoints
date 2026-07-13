@@ -7,6 +7,31 @@ import { Notebook } from "./components/Notebook";
 import { Ticket, type TicketSelection } from "./components/Ticket";
 
 const AdminApp = lazy(() => import("./admin/AdminApp").then((module) => ({ default: module.AdminApp })));
+const SPOTIFY_TRACK = "spotify:track:3ikk4wT6AIhOCtXBsZd0YO";
+const SPOTIFY_URL = "https://open.spotify.com/track/3ikk4wT6AIhOCtXBsZd0YO";
+
+type SpotifyController = {
+  addListener(event: string, listener: () => void): void;
+  play(): void;
+  destroy(): void;
+};
+
+type SpotifyIframeApi = {
+  createController(element: HTMLElement, options: { width: string; height: number; uri: string }, callback: (controller: SpotifyController) => void): void;
+};
+
+let spotifyApiPromise: Promise<SpotifyIframeApi> | undefined;
+
+function loadSpotifyApi() {
+  return spotifyApiPromise ??= new Promise<SpotifyIframeApi>((resolve, reject) => {
+    (window as Window & { onSpotifyIframeApiReady?: (api: SpotifyIframeApi) => void }).onSpotifyIframeApiReady = resolve;
+    const script = document.createElement("script");
+    script.src = "https://open.spotify.com/embed/iframe-api/v1";
+    script.async = true;
+    script.onerror = () => { spotifyApiPromise = undefined; script.remove(); reject(new Error("Spotify unavailable")); };
+    document.body.append(script);
+  });
+}
 
 export function App() {
   if (window.location.pathname.startsWith("/admin")) return <Suspense fallback={<main className="admin-loading"><span aria-hidden="true">⌖</span><p>正在打开旅行管理台</p></main>}><AdminApp fallbackTrips={bundledTrips} /></Suspense>;
@@ -58,6 +83,7 @@ function StoryApp() {
   return <>
     <a className="skip-link" href="#story">跳到旅行记录</a>
     <MemoryMap trip={activeTrip} />
+    <SpotifySoundtrack />
     <div ref={scrollRef} className={`story-scroll${selection ? " has-dialog" : ""}`} inert={selection ? true : undefined} aria-hidden={selection ? true : undefined}>
       <main id="story" className="story-inner">
         <header className="site-intro">
@@ -90,4 +116,57 @@ function StoryApp() {
     </div>
     {selection && <Notebook selection={selection} onClose={() => setSelection(null)} />}
   </>;
+}
+
+function SpotifySoundtrack() {
+  const mountRef = useRef<HTMLDivElement>(null);
+  const controllerRef = useRef<SpotifyController | null>(null);
+  const timerRef = useRef<number | null>(null);
+  const startedRef = useRef(false);
+  const [blocked, setBlocked] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
+
+  function play() {
+    startedRef.current = false;
+    setBlocked(false);
+    controllerRef.current?.play();
+    if (timerRef.current) window.clearTimeout(timerRef.current);
+    timerRef.current = window.setTimeout(() => { if (!startedRef.current) setBlocked(true); }, 1800);
+  }
+
+  useEffect(() => {
+    let active = true;
+    const host = mountRef.current;
+    if (!host) return;
+    void loadSpotifyApi().then((api) => {
+      if (!active) return;
+      const mount = document.createElement("div");
+      host.replaceChildren(mount);
+      api.createController(mount, { width: "100%", height: 80, uri: SPOTIFY_TRACK }, (controller) => {
+        if (!active) return controller.destroy();
+        controllerRef.current = controller;
+        controller.addListener("ready", () => {
+          host.querySelector("iframe")?.setAttribute("title", "Spotify 播放器：To April");
+          play();
+        });
+        controller.addListener("playback_started", () => {
+          startedRef.current = true;
+          setBlocked(false);
+          if (timerRef.current) window.clearTimeout(timerRef.current);
+        });
+      });
+    }).catch(() => { if (active) setUnavailable(true); });
+    return () => {
+      active = false;
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+      controllerRef.current?.destroy();
+      controllerRef.current = null;
+      host.replaceChildren();
+    };
+  }, []);
+
+  return <aside className="spotify-soundtrack" aria-label="背景音乐：To April，Shan Gao">
+    {blocked && <button type="button" className="spotify-start" onClick={play}>点击开启背景音乐</button>}
+    {unavailable ? <a href={SPOTIFY_URL} target="_blank" rel="noreferrer">在 Spotify 播放《To April》</a> : <div ref={mountRef} />}
+  </aside>;
 }
