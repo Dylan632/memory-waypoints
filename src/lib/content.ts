@@ -100,6 +100,8 @@ function validateTicket(value: unknown, path: string, ticketIds: Set<string>): v
     ticket.templateVariant === "scan" ||
     !VARIANTS.has(ticket.templateVariant as TicketTemplateVariant)
   )) fail(`${path}.templateVariant`, "is not a supported template variant");
+  if (ticket.templateImage !== undefined && ticket.templateImage !== null) url(ticket.templateImage, `${path}.templateImage URL`);
+  if (ticket.scanImage !== undefined) url(ticket.scanImage, `${path}.scanImage URL`);
   for (const field of ["subtitle", "serial", "price"] as const) {
     if (typeof ticket[field] !== "string") fail(`${path}.${field}`, "must be a string");
     if (ticket.variant !== "scan") text(ticket[field], `${path}.${field}`);
@@ -107,10 +109,12 @@ function validateTicket(value: unknown, path: string, ticketIds: Set<string>): v
   color(ticket.accent, `${path}.accent color`);
   rangedNumber(ticket.width, `${path}.width`, 220, 700);
   rangedNumber(ticket.ratio, `${path}.ratio`, .5, 5);
+  if (ticket.templateRatio !== undefined) rangedNumber(ticket.templateRatio, `${path}.templateRatio`, .5, 5);
+  if (ticket.scanRatio !== undefined) rangedNumber(ticket.scanRatio, `${path}.scanRatio`, .5, 5);
   rangedNumber(ticket.offset, `${path}.offset`, -500, 500);
   rangedNumber(ticket.rotation, `${path}.rotation`, -15, 15);
   if (ticket.image !== undefined) url(ticket.image, `${path}.image URL`);
-  if (ticket.variant === "scan" && ticket.image === undefined) fail(`${path}.image`, "is required for a scanned ticket");
+  if (ticket.variant === "scan" && ticket.image === undefined && ticket.scanImage === undefined) fail(`${path}.image`, "is required for a scanned ticket");
   if (!Array.isArray(ticket.photos)) fail(`${path}.photos`, "must be an array");
   ticket.photos.forEach((photo, index) => url(photo, `${path}.photos[${index}] URL`));
 }

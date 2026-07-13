@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from "react";
-import { switchTicketMode, type Ticket, type TicketTemplateVariant } from "../data";
+import { switchTicketMode, ticketScanImage, ticketTemplateImage, type Ticket, type TicketTemplateVariant } from "../data";
 import { uploadImage } from "./media";
 
 type Props = {
@@ -47,7 +47,8 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
     setMessage("正在上传票根…");
     try {
       const image = await uploadImage(file, "tickets");
-      onChange(ticketId, (current) => ({ ...switchTicketMode(current, "scan"), image: image.url, ratio: Math.min(3.5, Math.max(.65, image.ratio)) }));
+      const ratio = Math.min(3.5, Math.max(.65, image.ratio));
+      onChange(ticketId, (current) => ({ ...switchTicketMode(current, "scan"), image: image.url, scanImage: image.url, ratio, scanRatio: ratio }));
       setMessage("票根已上传并保存到草稿");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "票根上传失败");
@@ -76,6 +77,26 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
     } catch (error) {
       const detail = error instanceof Error ? error.message : "照片上传失败";
       setMessage(uploaded ? `已加入 ${uploaded} 张，其余未完成：${detail}` : detail);
+    } finally {
+      setBusy("");
+      onBusyChange(false);
+    }
+  }
+
+  async function uploadTemplateBackground(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !ticket) return;
+    const ticketId = ticket.id;
+    setBusy("background");
+    onBusyChange(true);
+    setMessage("正在上传票面背景…");
+    try {
+      const image = await uploadImage(file, "tickets");
+      onChange(ticketId, (current) => ({ ...current, templateImage: image.url }));
+      setMessage("票面背景已保存到草稿");
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "票面背景上传失败");
     } finally {
       setBusy("");
       onBusyChange(false);
@@ -128,17 +149,17 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
       <div className="ticket-media-row">
         <div>
           <span className="admin-label">票根图像</span>
-          <p>{ticket.variant === "scan" ? "当前使用真实票根图片" : ticket.image ? "图片已保留，可随时切换回来" : "上传后会自动切换为真实票根"}</p>
+          <p>{ticket.variant === "scan" ? "当前使用真实票根图片" : ticketScanImage(ticket) ? "图片已保留，可随时切换回来" : "上传后会自动切换为真实票根"}</p>
         </div>
         <label className={`admin-upload-button${busy === "ticket" ? " is-busy" : ""}`}>
           <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTicket} disabled={Boolean(busy) || disabled} />
-          {ticket.image ? "替换票根" : "选择票根图片"}
+          {ticketScanImage(ticket) ? "替换票根" : "选择票根图片"}
         </label>
       </div>
 
       <div className="admin-field-grid admin-appearance-fields">
         <label className="admin-field"><span>显示方式</span><select value={ticket.variant === "scan" ? "scan" : "template"} onChange={(event) => onChange(ticket.id, (current) => switchTicketMode(current, event.target.value as "scan" | "template"))}>
-          <option value="scan" disabled={!ticket.image}>真实票根照片</option>
+          <option value="scan" disabled={!ticketScanImage(ticket)}>真实票根照片</option>
           <option value="template">样式票根</option>
         </select></label>
         {ticket.variant !== "scan" && <>
@@ -149,6 +170,14 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
           <label className="admin-field"><span>强调色</span><div className="admin-color-field"><input type="color" value={ticket.accent} onChange={(event) => update("accent", event.target.value)} /><code>{ticket.accent}</code></div></label>
         </>}
       </div>
+
+      {ticket.variant !== "scan" && (ticket.variant === "scenic" || ticket.variant === "cinema" ? <div className="ticket-media-row">
+        <div><span className="admin-label">样式票根背景</span><p>这张照片会嵌在票面里，不会替换整张票根。</p></div>
+        <label className={`admin-upload-button${busy === "background" ? " is-busy" : ""}`}>
+          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTemplateBackground} disabled={Boolean(busy) || disabled} />
+          {ticketTemplateImage(ticket) ? "替换背景" : "选择背景照片"}
+        </label>
+      </div> : <p className="admin-field-hint">展览票和车票不显示背景照片；如需票面带照片，请选择“风景票”或“电影票”。</p>)}
 
       <details className="admin-layout-details">
         <summary>调整票根位置和大小</summary>

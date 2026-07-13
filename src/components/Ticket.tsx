@@ -1,13 +1,15 @@
 import { useRef, type CSSProperties, type PointerEvent } from "react";
-import type { Ticket as TicketData } from "../data";
+import { ticketScanImage, ticketTemplateImage, type Ticket as TicketData } from "../data";
 
 export type TicketSelection = { ticket: TicketData; sourceRect: DOMRect; sourceElement: HTMLButtonElement };
 
 export function TicketArtwork({ ticket }: { ticket: TicketData }) {
-  const style = { "--ticket-accent": ticket.accent, "--ticket-image": ticket.image ? `url(${ticket.image})` : "none" } as CSSProperties;
-  if (ticket.variant === "scan" && ticket.image) {
+  const scanImage = ticketScanImage(ticket);
+  const templateImage = ticketTemplateImage(ticket);
+  const style = { "--ticket-accent": ticket.accent, "--ticket-image": templateImage ? `url(${templateImage})` : "none" } as CSSProperties;
+  if (ticket.variant === "scan" && scanImage) {
     return <div className="ticket-art ticket-art--scan" style={style}>
-      <img src={ticket.image} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
+      <img src={scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
     </div>;
   }
   return <div className={`ticket-art ticket-art--${ticket.variant}`} style={style}>

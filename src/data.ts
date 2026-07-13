@@ -12,6 +12,10 @@ export type Ticket = {
   price: string;
   variant: TicketVariant;
   templateVariant?: TicketTemplateVariant;
+  templateImage?: string | null;
+  templateRatio?: number;
+  scanImage?: string;
+  scanRatio?: number;
   accent: string;
   width: number;
   ratio: number;
@@ -22,9 +26,40 @@ export type Ticket = {
   photos: string[];
 };
 
+const TEMPLATE_RATIOS: Record<TicketTemplateVariant, number> = {
+  scenic: 2.66,
+  rail: 2.18,
+  museum: 1.58,
+  cinema: 2.5,
+};
+
+export function ticketScanImage(ticket: Ticket): string | undefined {
+  return ticket.scanImage ?? (ticket.variant === "scan" ? ticket.image : undefined);
+}
+
+export function ticketTemplateImage(ticket: Ticket): string | undefined {
+  if (ticket.templateImage === null) return undefined;
+  if (ticket.templateImage) return ticket.templateImage;
+  return ticket.variant !== "scan" && !ticket.scanImage ? ticket.image : undefined;
+}
+
 export function switchTicketMode(ticket: Ticket, mode: "scan" | "template"): Ticket {
+  const isTemplate = ticket.variant !== "scan";
   const templateVariant = ticket.variant === "scan" ? ticket.templateVariant ?? "museum" : ticket.variant;
-  return { ...ticket, templateVariant, variant: mode === "scan" ? "scan" : templateVariant };
+  const templateImage = isTemplate ? ticket.templateImage ?? ticket.image ?? null : ticket.templateImage ?? null;
+  const templateRatio = isTemplate ? ticket.ratio : ticket.templateRatio ?? TEMPLATE_RATIOS[templateVariant];
+  const scanImage = ticket.scanImage ?? (ticket.variant === "scan" ? ticket.image : undefined);
+  const scanRatio = ticket.scanRatio ?? (ticket.variant === "scan" ? ticket.ratio : undefined);
+  return {
+    ...ticket,
+    templateVariant,
+    templateImage,
+    templateRatio,
+    scanImage,
+    scanRatio,
+    variant: mode === "scan" ? "scan" : templateVariant,
+    ratio: mode === "scan" ? scanRatio ?? ticket.ratio : templateRatio,
+  };
 }
 
 export type Trip = {

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { switchTicketMode } from "../src/data.ts";
+import { switchTicketMode, ticketScanImage, ticketTemplateImage } from "../src/data.ts";
 import { loadPublishedTrips, parseRouteText, validateTrips } from "../src/lib/content.ts";
 
 const validTrips = [
@@ -48,13 +48,25 @@ test("validateTrips accepts a complete trip including scanned tickets", () => {
 });
 
 test("ticket photos can switch back to their previous template style", () => {
-  const template = { ...validTrips[0].tickets[0], variant: "scenic" };
-  const scanned = switchTicketMode(template, "scan");
+  const template = { ...validTrips[0].tickets[0], variant: "scenic", ratio: 2.66, image: "https://example.com/background.jpg" };
+  const scanMode = switchTicketMode(template, "scan");
+  const scanned = { ...scanMode, image: "https://example.com/ticket.jpg", scanImage: "https://example.com/ticket.jpg", ratio: 1.1, scanRatio: 1.1 };
+  const restored = switchTicketMode(scanned, "template");
 
   assert.equal(scanned.variant, "scan");
   assert.equal(scanned.templateVariant, "scenic");
-  assert.equal(switchTicketMode(scanned, "template").variant, "scenic");
-  assert.equal(switchTicketMode({ ...scanned, templateVariant: undefined }, "template").variant, "museum");
+  assert.equal(restored.variant, "scenic");
+  assert.equal(restored.ratio, 2.66);
+  assert.equal(ticketTemplateImage(restored), "https://example.com/background.jpg");
+  assert.equal(ticketScanImage(restored), "https://example.com/ticket.jpg");
+  assert.equal(switchTicketMode(restored, "scan").ratio, 1.1);
+
+  const legacyScan = { ...scanned, templateVariant: undefined, templateImage: undefined, templateRatio: undefined, scanImage: undefined, scanRatio: undefined };
+  const legacyRestored = switchTicketMode(legacyScan, "template");
+  assert.equal(legacyRestored.variant, "museum");
+  assert.equal(legacyRestored.ratio, 1.58);
+  assert.equal(ticketTemplateImage(legacyRestored), undefined);
+  assert.equal(ticketScanImage(legacyRestored), "https://example.com/ticket.jpg");
 });
 
 test("validateTrips rejects empty, unsafe, duplicate, and malformed content", () => {
