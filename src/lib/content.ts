@@ -1,5 +1,5 @@
-import type { TicketVariant, Trip } from "../data";
-import type { Coordinate } from "./trips";
+import type { TicketVariant, Trip } from "../data.js";
+import type { Coordinate } from "./trips.js";
 
 type JsonRecord = Record<string, unknown>;
 type FetchResponse = { ok: boolean; json(): Promise<unknown> };

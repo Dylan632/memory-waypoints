@@ -1,4 +1,4 @@
-import type { Coordinate } from "./lib/trips";
+import type { Coordinate } from "./lib/trips.js";
 
 export type TicketVariant = "scenic" | "rail" | "museum" | "cinema" | "scan";
 

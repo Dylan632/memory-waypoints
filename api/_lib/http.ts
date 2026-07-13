@@ -1,4 +1,4 @@
-import { isSameOrigin, readSession } from "./auth.ts";
+import { isSameOrigin, readSession } from "./auth.js";
 
 const NO_STORE = { "cache-control": "no-store" };
 

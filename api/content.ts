@@ -1,7 +1,7 @@
-import { validateTrips } from "../src/lib/content.ts";
+import { validateTrips } from "../src/lib/content.js";
 
-import { error, json, methodNotAllowed } from "./_lib/http.ts";
-import { loadPublished } from "./_lib/store.ts";
+import { error, json, methodNotAllowed } from "./_lib/http.js";
+import { loadPublished } from "./_lib/store.js";
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed("GET");

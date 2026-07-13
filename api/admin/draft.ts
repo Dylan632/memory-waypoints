@@ -1,5 +1,5 @@
-import { error, json, methodNotAllowed, objectBody, readJson, requireAdmin } from "../_lib/http.ts";
-import { loadDraft, saveDraft } from "../_lib/store.ts";
+import { error, json, methodNotAllowed, objectBody, readJson, requireAdmin } from "../_lib/http.js";
+import { loadDraft, saveDraft } from "../_lib/store.js";
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET" && request.method !== "PUT") return methodNotAllowed("GET, PUT");

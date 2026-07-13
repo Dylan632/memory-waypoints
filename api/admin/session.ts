@@ -1,4 +1,4 @@
-import { json, methodNotAllowed, requireAdmin } from "../_lib/http.ts";
+import { json, methodNotAllowed, requireAdmin } from "../_lib/http.js";
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed("GET");

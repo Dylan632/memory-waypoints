@@ -1,7 +1,7 @@
 import { issueSignedToken } from "@vercel/blob";
 import { handleUploadPresigned, type HandleUploadPresignedBody } from "@vercel/blob/client";
 
-import { error, json, methodNotAllowed, objectBody, readJson, requireAdmin } from "../_lib/http.ts";
+import { error, json, methodNotAllowed, objectBody, readJson, requireAdmin } from "../_lib/http.js";
 
 const MAXIMUM_SIZE = 20 * 1024 * 1024;
 const IMAGE_PATH = /^memory-waypoints\/uploads\/(?:tickets|photos)\/[^/\\\u0000-\u001f]{1,150}\.(?:jpe?g|png|webp)$/i;

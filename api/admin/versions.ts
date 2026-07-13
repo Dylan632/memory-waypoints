@@ -1,5 +1,5 @@
-import { error, json, methodNotAllowed, requireAdmin } from "../_lib/http.ts";
-import { listVersions } from "../_lib/store.ts";
+import { error, json, methodNotAllowed, requireAdmin } from "../_lib/http.js";
+import { listVersions } from "../_lib/store.js";
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "GET") return methodNotAllowed("GET");

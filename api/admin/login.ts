@@ -1,5 +1,5 @@
-import { createSession, createSessionCookie, verifyPassword } from "../_lib/auth.ts";
-import { error, json, methodNotAllowed, objectBody, readJson, requireOrigin } from "../_lib/http.ts";
+import { createSession, createSessionCookie, verifyPassword } from "../_lib/auth.js";
+import { error, json, methodNotAllowed, objectBody, readJson, requireOrigin } from "../_lib/http.js";
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "POST") return methodNotAllowed("POST");

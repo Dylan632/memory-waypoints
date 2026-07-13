@@ -1,7 +1,7 @@
-import { validateTrips } from "../../src/lib/content.ts";
+import { validateTrips } from "../../src/lib/content.js";
 
-import { error, json, methodNotAllowed, objectBody, readJson, requireAdmin } from "../_lib/http.ts";
-import { loadVersion, publishTrips } from "../_lib/store.ts";
+import { error, json, methodNotAllowed, objectBody, readJson, requireAdmin } from "../_lib/http.js";
+import { loadVersion, publishTrips } from "../_lib/store.js";
 
 export async function handler(request: Request): Promise<Response> {
   if (request.method !== "POST") return methodNotAllowed("POST");
