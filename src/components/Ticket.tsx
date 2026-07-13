@@ -5,6 +5,11 @@ export type TicketSelection = { ticket: TicketData; sourceRect: DOMRect; sourceE
 
 export function TicketArtwork({ ticket }: { ticket: TicketData }) {
   const style = { "--ticket-accent": ticket.accent, "--ticket-image": ticket.image ? `url(${ticket.image})` : "none" } as CSSProperties;
+  if (ticket.variant === "scan" && ticket.image) {
+    return <div className="ticket-art ticket-art--scan" style={style}>
+      <img src={ticket.image} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
+    </div>;
+  }
   return <div className={`ticket-art ticket-art--${ticket.variant}`} style={style}>
     <div className="ticket-stub">
       <small>{ticket.date}</small><b>{ticket.price}</b><span>{ticket.serial}</span>

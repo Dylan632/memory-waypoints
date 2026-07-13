@@ -38,3 +38,18 @@ Below 760px, the story stream is full width, ticket overflow remains intentional
 - Never animate layout properties.
 - Never add generic dashboard or landing-page chrome.
 - Never use reference-site personal assets or copy.
+
+## Private admin
+
+The admin is a warm travel-notebook workspace, not a generic SaaS dashboard. Desktop uses a trip rail, a focused editor, and a dark live preview. Mobile removes the full map editor and becomes a quick ticket/photo intake surface.
+
+- Canvas: `oklch(95% .018 86)`
+- Paper: `oklch(98% .012 86)`
+- Sidebar: `oklch(89% .024 82)`
+- Ink: `oklch(24% .018 65)`
+- Accent: `oklch(57% .13 42)`
+- Radius scale: `4px`, `8px`, `14px`, pill only for status dots
+
+Forms use the system CJK sans stack for clarity. Titles use Iowan Old Style with Songti SC fallback to connect the utility surface to the public notebook. Depth comes from background lightness steps and restrained paper shadows. Buttons press to `scale(.96)` and all motion respects reduced-motion settings.
+
+The admin must keep draft and publish separate, show inline validation, preserve a visible logout path, and never expose secrets to the client bundle.

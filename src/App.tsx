@@ -1,17 +1,36 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { trips, type Trip } from "./data";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { trips as bundledTrips, type Trip } from "./data";
 import { sortTrips, type SortOrder } from "./lib/trips";
+import { loadPublishedTrips } from "./lib/content";
 import { MemoryMap } from "./components/MemoryMap";
 import { Notebook } from "./components/Notebook";
 import { Ticket, type TicketSelection } from "./components/Ticket";
 
+const AdminApp = lazy(() => import("./admin/AdminApp").then((module) => ({ default: module.AdminApp })));
+
 export function App() {
+  if (window.location.pathname.startsWith("/admin")) return <Suspense fallback={<main className="admin-loading"><span aria-hidden="true">⌖</span><p>正在打开旅行管理台</p></main>}><AdminApp fallbackTrips={bundledTrips} /></Suspense>;
+  return <StoryApp />;
+}
+
+function StoryApp() {
+  const [trips, setTrips] = useState<Trip[]>(bundledTrips);
   const [order, setOrder] = useState<SortOrder>("newest");
-  const orderedTrips = useMemo(() => sortTrips(trips, order), [order]);
+  const orderedTrips = useMemo(() => sortTrips(trips, order), [order, trips]);
   const [activeId, setActiveId] = useState(orderedTrips[0].id);
   const [selection, setSelection] = useState<TicketSelection | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const activeTrip: Trip = orderedTrips.find((trip) => trip.id === activeId) ?? orderedTrips[0];
+
+  useEffect(() => {
+    let current = true;
+    void loadPublishedTrips(bundledTrips).then((published) => { if (current) setTrips(published); });
+    return () => { current = false; };
+  }, []);
+
+  useEffect(() => {
+    if (!orderedTrips.some((trip) => trip.id === activeId)) setActiveId(orderedTrips[0].id);
+  }, [activeId, orderedTrips]);
 
   useEffect(() => {
     const root = scrollRef.current;

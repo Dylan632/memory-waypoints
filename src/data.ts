@@ -1,6 +1,6 @@
 import type { Coordinate } from "./lib/trips";
 
-export type TicketVariant = "scenic" | "rail" | "museum" | "cinema";
+export type TicketVariant = "scenic" | "rail" | "museum" | "cinema" | "scan";
 
 export type Ticket = {
   id: string;
