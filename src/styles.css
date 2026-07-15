@@ -18,14 +18,26 @@ button { color: inherit; }
 .skip-link { position: fixed; z-index: 4000; top: 8px; left: 8px; padding: 10px 14px; color: #161616; background: #fff; transform: translateY(-150%); transition: transform 150ms ease-out; }
 .skip-link:focus { transform: translateY(0); }
 
-.map-stage { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #111315; }
-.map-layer { position: absolute; inset: 0; opacity: var(--map-opacity); transition: opacity 100ms linear; will-change: opacity; }
-.map-canvas { position: absolute; inset: 0; }
-.map-shade { position: absolute; inset: 0; pointer-events: none; background: rgba(5,7,8,.28); }
-.map-attribution { position: absolute; left: 9px; bottom: 7px; padding: 2px 6px; border-radius: 4px; color: rgba(255,255,255,.56); background: rgba(0,0,0,.24); font-size: 9px; line-height: 1.4; pointer-events: none; }
+.map-stage { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #151719; }
+.map-canvas { position: absolute; inset: 0; transition: filter 720ms cubic-bezier(.22,.61,.36,1); }
+.map-stage--night .map-canvas { filter: grayscale(.75) saturate(.55) brightness(.46) contrast(1.14); }
+.map-stage--mist .map-canvas { filter: grayscale(.9) saturate(.42) brightness(.73) contrast(.92); }
+.map-stage--paper .map-canvas { filter: grayscale(.93) saturate(.3) brightness(1.08) contrast(.72); }
+.map-shade { position: absolute; inset: 0; pointer-events: none; background: rgba(5, 7, 8, .22); transition: background-color 720ms cubic-bezier(.22,.61,.36,1); }
+.map-stage--night .map-shade { background: rgba(5, 7, 8, .44); }
+.map-stage--mist .map-shade { background: rgba(17, 20, 21, .32); }
+.map-stage--paper .map-shade { background: rgba(213, 211, 201, .06); }
+.map-route { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.map-route polyline { fill: none; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 4px rgba(0,0,0,.34)); transition: stroke 420ms ease-out; }
+.map-veil { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: #101214; transition: opacity 480ms cubic-bezier(.22,.61,.36,1); }
+.map-veil.is-visible { opacity: .5; }
+.map-stage--paper .map-veil { background: #c6c5bf; }
 .map-caption { position: absolute; right: 22px; bottom: 18px; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; color: rgba(255,255,255,.55); text-shadow: 0 1px 12px rgba(0,0,0,.7); pointer-events: none; }
 .map-caption span { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; }
 .map-caption strong { font-size: 13px; font-weight: 500; }
+.maplibregl-ctrl-bottom-left { opacity: .58; }
+.maplibregl-ctrl-attrib { font-size: 9px !important; background: transparent !important; color: rgba(255,255,255,.6) !important; }
+.maplibregl-ctrl-attrib a { color: inherit !important; }
 
 .story-scroll { position: fixed; inset: 0; z-index: 10; overflow-x: hidden; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-color: rgba(255,255,255,.38) transparent; scrollbar-width: thin; }
 .story-scroll.has-dialog { overflow: hidden; }
@@ -149,7 +161,6 @@ button { color: inherit; }
 @media (max-width: 760px) {
   .map-caption { display: none; }
   .story-scroll::-webkit-scrollbar { width: 4px; }
-  .map-attribution { display: none; }
   .qq-soundtrack { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
   .story-inner { width: 100%; padding: 18vh 0; }
   .site-intro { padding: 40px 20px; }

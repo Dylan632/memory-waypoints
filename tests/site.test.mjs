@@ -47,7 +47,15 @@ test("production build includes the private travel editor without replacing the 
 test("published trips immediately select the first map chapter", async () => {
   const app = await readFile(new URL("../src/App.tsx", import.meta.url), "utf8");
 
-  assert.match(app, /loadPublishedTrips[\s\S]*setTrips\(published\);[\s\S]*setScene\(\{ from: null, to: sortTrips\(published, "newest"\)\[0\], progress: 1 \}\)/);
+  assert.match(app, /loadPublishedTrips[\s\S]*setTrips\(published\);[\s\S]*setActiveId\(sortTrips\(published, "newest"\)\[0\]\.id\)/);
+});
+
+test("scrolling reuses one map and eases it to the next trip", async () => {
+  const map = await readFile(new URL("../src/components/MemoryMap.tsx", import.meta.url), "utf8");
+
+  assert.match(map, /map\.fitBounds[\s\S]*duration: reduced \? 0 : 1150/);
+  assert.match(map, /map-veil/);
+  assert.doesNotMatch(map, /MapScene|map-layer/);
 });
 
 test("admin keeps the full editor on desktop and a focused quick-upload surface on mobile", async () => {

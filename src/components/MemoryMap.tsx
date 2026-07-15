@@ -1,56 +1,82 @@
-import { useEffect, useRef, type CSSProperties } from "react";
-import maplibregl from "maplibre-gl";
+import { useEffect, useRef, useState } from "react";
+import maplibregl, { type GeoJSONSource, type Map as MapLibreMap } from "maplibre-gl";
 import type { Trip } from "../data";
 import { routeBounds, routeFeature } from "../lib/trips";
 
-const MAP_STYLES: Record<Trip["mapTone"], string> = {
-  night: "https://tiles.openfreemap.org/styles/dark",
-  mist: "https://tiles.openfreemap.org/styles/fiord",
-  paper: "https://tiles.openfreemap.org/styles/positron",
-};
+const SOURCE_ID = "memory-route";
+const LINE_ID = "memory-route-line";
+const GLOW_ID = "memory-route-glow";
 
-export type MapScene = { from: Trip | null; to: Trip; progress: number };
-
-export function MemoryMap({ scene, preload }: { scene: MapScene; preload?: Trip }) {
-  const transitioning = scene.from && scene.from.id !== scene.to.id && scene.progress > 0 && scene.progress < 1;
-  const visibleTrip = transitioning && scene.progress < .5 ? scene.from! : scene.to;
-
-  return <div className="map-stage" aria-label={`当前地图：${visibleTrip.destination}`}>
-    {transitioning && <MapLayer key={scene.from!.id} trip={scene.from!} opacity={1 - scene.progress} />}
-    <MapLayer key={scene.to.id} trip={scene.to} opacity={transitioning ? scene.progress : 1} />
-    {!transitioning && preload && <MapLayer key={preload.id} trip={preload} opacity={0} />}
-    <div className="map-shade" />
-    <div className="map-attribution">© OpenFreeMap · © OpenMapTiles · © OpenStreetMap</div>
-    <div className="map-caption" aria-live="polite">
-      <span>{visibleTrip.country}</span><strong>{visibleTrip.destination}</strong>
-    </div>
-  </div>;
-}
-
-function MapLayer({ trip, opacity }: { trip: Trip; opacity: number }) {
+export function MemoryMap({ trip }: { trip: Trip }) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<MapLibreMap | null>(null);
+  const routeRef = useRef(trip.route);
+  const routeLineRef = useRef<SVGPolylineElement>(null);
+  const [ready, setReady] = useState(false);
+  const [veiled, setVeiled] = useState(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
     const map = new maplibregl.Map({
       container: containerRef.current,
-      style: MAP_STYLES[trip.mapTone],
-      center: trip.route[0],
+      style: "https://tiles.openfreemap.org/styles/liberty",
+      center: [118.08, 24.46],
       zoom: 10,
       attributionControl: false,
       interactive: false,
       fadeDuration: 0,
     });
+    const syncRoute = () => {
+      const points = routeRef.current.map((coordinate) => {
+        const point = map.project(coordinate);
+        return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+      }).join(" ");
+      routeLineRef.current?.setAttribute("points", points);
+    };
+    map.on("move", syncRoute);
+    map.on("resize", syncRoute);
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
     map.on("load", () => {
-      map.addSource("memory-route", { type: "geojson", data: routeFeature(trip.route) });
-      map.addLayer({ id: "memory-route-glow", type: "line", source: "memory-route", paint: { "line-color": trip.routeColor, "line-width": 9, "line-opacity": .2, "line-blur": 4 } });
-      map.addLayer({ id: "memory-route-line", type: "line", source: "memory-route", layout: { "line-join": "round", "line-cap": "round" }, paint: { "line-color": trip.routeColor, "line-width": 3.4, "line-opacity": .96 } });
-      map.fitBounds(routeBounds(trip.route), { padding: window.innerWidth <= 760 ? 36 : 60, duration: 0, maxZoom: 11.5 });
+      map.addSource(SOURCE_ID, { type: "geojson", data: routeFeature(trip.route) });
+      map.addLayer({ id: GLOW_ID, type: "line", source: SOURCE_ID, paint: { "line-color": trip.routeColor, "line-width": 8, "line-opacity": 0.18, "line-blur": 3 } });
+      map.addLayer({ id: LINE_ID, type: "line", source: SOURCE_ID, layout: { "line-join": "round", "line-cap": "round" }, paint: { "line-color": trip.routeColor, "line-width": 3.2, "line-opacity": 0.94 } });
+      mapRef.current = map;
+      setReady(true);
+      syncRoute();
     });
-    return () => map.remove();
-  }, [trip]);
+    return () => { map.remove(); mapRef.current = null; };
+  }, []);
 
-  return <div className={`map-layer map-layer--${trip.mapTone}`} style={{ "--map-opacity": opacity } as CSSProperties}>
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    routeRef.current = trip.route;
+    setVeiled(true);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let hideTimer = 0;
+    const updateTimer = window.setTimeout(() => {
+      (map.getSource(SOURCE_ID) as GeoJSONSource).setData(routeFeature(trip.route));
+      map.setPaintProperty(LINE_ID, "line-color", trip.routeColor);
+      map.setPaintProperty(GLOW_ID, "line-color", trip.routeColor);
+      map.fitBounds(routeBounds(trip.route), {
+        padding: window.innerWidth <= 760
+          ? { top: 130, right: 42, bottom: 190, left: 42 }
+          : { top: 100, right: 180, bottom: 100, left: 180 },
+        duration: reduced ? 0 : 1150,
+        maxZoom: 11.5,
+      });
+      hideTimer = window.setTimeout(() => setVeiled(false), reduced ? 0 : 220);
+    }, reduced ? 0 : 140);
+    return () => { window.clearTimeout(updateTimer); window.clearTimeout(hideTimer); };
+  }, [ready, trip]);
+
+  return <div className={`map-stage map-stage--${trip.mapTone}`} aria-label={`当前地图：${trip.destination}`}>
     <div ref={containerRef} className="map-canvas" />
+    <div className="map-shade" />
+    <svg className="map-route" aria-hidden="true"><polyline ref={routeLineRef} style={{ stroke: trip.routeColor }} /></svg>
+    <div className={`map-veil${veiled ? " is-visible" : ""}`} />
+    <div className="map-caption" aria-live="polite">
+      <span>{trip.country}</span><strong>{trip.destination}</strong>
+    </div>
   </div>;
 }

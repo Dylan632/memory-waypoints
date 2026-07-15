@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { trips as bundledTrips, type Trip } from "./data";
 import { sortTrips, type SortOrder } from "./lib/trips";
 import { loadPublishedTrips } from "./lib/content";
-import { MemoryMap, type MapScene } from "./components/MemoryMap";
+import { MemoryMap } from "./components/MemoryMap";
 import { Notebook } from "./components/Notebook";
 import { Ticket, type TicketSelection } from "./components/Ticket";
 
@@ -18,56 +18,34 @@ function StoryApp() {
   const [trips, setTrips] = useState<Trip[]>(bundledTrips);
   const [order, setOrder] = useState<SortOrder>("newest");
   const orderedTrips = useMemo(() => sortTrips(trips, order), [order, trips]);
-  const [scene, setScene] = useState<MapScene>({ from: null, to: orderedTrips[0], progress: 1 });
+  const [activeId, setActiveId] = useState(orderedTrips[0].id);
   const [selection, setSelection] = useState<TicketSelection | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const preloadTrip = !scene.from ? orderedTrips[orderedTrips.findIndex((trip) => trip.id === scene.to.id) + 1] : undefined;
+  const activeTrip: Trip = orderedTrips.find((trip) => trip.id === activeId) ?? orderedTrips[0];
 
   useEffect(() => {
     let current = true;
     void loadPublishedTrips(bundledTrips).then((published) => {
       if (!current) return;
       setTrips(published);
-      setScene({ from: null, to: sortTrips(published, "newest")[0], progress: 1 });
+      setActiveId(sortTrips(published, "newest")[0].id);
     });
     return () => { current = false; };
   }, []);
 
   useEffect(() => {
+    if (!orderedTrips.some((trip) => trip.id === activeId)) setActiveId(orderedTrips[0].id);
+  }, [activeId, orderedTrips]);
+
+  useEffect(() => {
     const root = scrollRef.current;
     if (!root) return;
-    let frame = 0;
-    const update = () => {
-      const rootRect = root.getBoundingClientRect();
-      const center = rootRect.top + rootRect.height / 2;
-      const transition = [...root.querySelectorAll<HTMLElement>("[data-transition-from]")].find((node) => {
-        const rect = node.getBoundingClientRect();
-        return rect.top <= center && rect.bottom >= center;
-      });
-      if (transition) {
-        const rect = transition.getBoundingClientRect();
-        const from = orderedTrips.find((trip) => trip.id === transition.dataset.transitionFrom);
-        const to = orderedTrips.find((trip) => trip.id === transition.dataset.transitionTo);
-        if (from && to) {
-          const progress = Math.max(0, Math.min(1, (center - rect.top) / rect.height));
-          setScene((current) => current.from?.id === from.id && current.to.id === to.id && Math.abs(current.progress - progress) < .004 ? current : { from, to, progress });
-          return;
-        }
-      }
-      const sections = [...root.querySelectorAll<HTMLElement>("[data-trip-id]")];
-      const closest = sections.sort((a, b) => {
-        const aRect = a.getBoundingClientRect();
-        const bRect = b.getBoundingClientRect();
-        return Math.abs((aRect.top + aRect.bottom) / 2 - center) - Math.abs((bRect.top + bRect.bottom) / 2 - center);
-      })[0];
-      const trip = orderedTrips.find((item) => item.id === closest?.dataset.tripId) ?? orderedTrips[0];
-      setScene((current) => !current.from && current.to.id === trip.id ? current : { from: null, to: trip, progress: 1 });
-    };
-    const schedule = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(update); };
-    root.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    schedule();
-    return () => { cancelAnimationFrame(frame); root.removeEventListener("scroll", schedule); window.removeEventListener("resize", schedule); };
+    const observer = new IntersectionObserver((entries) => {
+      const current = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (current) setActiveId((current.target as HTMLElement).dataset.tripId!);
+    }, { root, rootMargin: "-52% 0px -18%", threshold: [0, .25, .5, .75, 1] });
+    root.querySelectorAll<HTMLElement>("[data-trip-id]").forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
   }, [orderedTrips]);
 
   useEffect(() => {
@@ -96,13 +74,13 @@ function StoryApp() {
     if (next === order) return;
     const nextTrips = sortTrips(trips, next);
     setOrder(next);
-    setScene({ from: null, to: nextTrips[0], progress: 1 });
+    setActiveId(nextTrips[0].id);
     scrollRef.current?.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
 
   return <>
     <a className="skip-link" href="#story">跳到旅行记录</a>
-    <MemoryMap scene={scene} preload={preloadTrip} />
+    <MemoryMap trip={activeTrip} />
     <div ref={scrollRef} className={`story-scroll${selection ? " has-dialog" : ""}`} inert={selection ? true : undefined} aria-hidden={selection ? true : undefined}>
       <QQMusicSoundtrack />
       <main id="story" className="story-inner">
@@ -128,7 +106,7 @@ function StoryApp() {
               {trip.tickets.map((ticket) => <Ticket key={ticket.id} ticket={ticket} onOpen={setSelection} />)}
             </div>
           </section>
-          {tripIndex < orderedTrips.length - 1 && <div className="trip-transition" data-transition-from={trip.id} data-transition-to={orderedTrips[tripIndex + 1].id} aria-hidden="true" />}
+          {tripIndex < orderedTrips.length - 1 && <div className="trip-transition" aria-hidden="true" />}
         </div>)}
 
         <footer className="story-end">
