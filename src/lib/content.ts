@@ -1,4 +1,4 @@
-import type { TicketTemplateVariant, TicketVariant, Trip } from "../data.js";
+import type { TicketMotionPreset, TicketTemplateVariant, TicketVariant, Trip } from "../data.js";
 import type { Coordinate } from "./trips.js";
 
 type JsonRecord = Record<string, unknown>;
@@ -8,6 +8,7 @@ type ContentFetcher = (url: string) => Promise<FetchResponse>;
 const ID_PATTERN = /^[a-z0-9](?:[a-z0-9_-]{0,99})$/i;
 const COLOR_PATTERN = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 const VARIANTS = new Set<TicketVariant>(["scenic", "rail", "museum", "cinema", "scan"]);
+const MOTION_PRESETS = new Set<TicketMotionPreset>(["gentle", "portrait", "stamp", "tilt"]);
 const MAP_TONES = new Set<Trip["mapTone"]>(["night", "paper", "mist"]);
 
 function fail(path: string, message: string): never {
@@ -102,6 +103,13 @@ function validateTicket(value: unknown, path: string, ticketIds: Set<string>): v
   )) fail(`${path}.templateVariant`, "is not a supported template variant");
   if (ticket.templateImage !== undefined && ticket.templateImage !== null) url(ticket.templateImage, `${path}.templateImage URL`);
   if (ticket.scanImage !== undefined) url(ticket.scanImage, `${path}.scanImage URL`);
+  if (ticket.motionPreset !== undefined && (
+    typeof ticket.motionPreset !== "string" ||
+    !MOTION_PRESETS.has(ticket.motionPreset as TicketMotionPreset)
+  )) fail(`${path}.motionPreset`, "is not supported");
+  for (const field of ["foregroundImage", "stampImage"] as const) {
+    if (ticket[field] !== undefined) url(ticket[field], `${path}.${field} URL`);
+  }
   for (const field of ["subtitle", "serial", "price"] as const) {
     if (typeof ticket[field] !== "string") fail(`${path}.${field}`, "must be a string");
     if (ticket.variant !== "scan") text(ticket[field], `${path}.${field}`);

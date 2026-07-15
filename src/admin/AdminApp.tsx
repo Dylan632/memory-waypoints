@@ -60,6 +60,7 @@ function makeTicket(kind: "scan" | "template"): Ticket {
     accent: "#315c64",
     width: kind === "scan" ? 520 : 420,
     ratio: kind === "scan" ? 1.8 : 2.1,
+    motionPreset: "gentle",
     offset: 0,
     rotation: 0,
     story: "",

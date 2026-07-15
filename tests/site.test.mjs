@@ -99,3 +99,15 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(ticket, /setProperty\("--ticket-ink-x"/);
   assert.match(ticket, /setProperty\("--ticket-print-x"/);
 });
+
+test("admin can choose uploaded ticket motion and add optional artwork layers", async () => {
+  const editor = await readFile(new URL("../src/admin/TicketEditor.tsx", import.meta.url), "utf8");
+  const ticket = await readFile(new URL("../src/components/Ticket.tsx", import.meta.url), "utf8");
+
+  assert.match(editor, /票根动效/);
+  assert.match(editor, /人物前景层/);
+  assert.match(editor, /印章图层/);
+  assert.match(ticket, /ticket\.motionPreset\s*\?\?/);
+  assert.match(ticket, /ticket\.foregroundImage/);
+  assert.match(ticket, /ticket\.stampImage/);
+});

@@ -119,6 +119,14 @@ test("validateTrips rejects empty, unsafe, duplicate, and malformed content", ()
   const stationaryRoute = clone();
   stationaryRoute[0].route = [[120.13, 30.25], [120.13, 30.25]];
   assert.throws(() => validateTrips(stationaryRoute), /distinct/i);
+
+  const badMotionPreset = clone();
+  badMotionPreset[0].tickets[0].motionPreset = "shake-everything";
+  assert.throws(() => validateTrips(badMotionPreset), /motionPreset/i);
+
+  const unsafeMotionLayer = clone();
+  unsafeMotionLayer[0].tickets[0].foregroundImage = "javascript:alert(1)";
+  assert.throws(() => validateTrips(unsafeMotionLayer), /foregroundImage/i);
 });
 
 test("parseRouteText reads GeoJSON LineString, Feature, and FeatureCollection", () => {

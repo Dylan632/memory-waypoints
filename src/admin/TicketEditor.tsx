@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent } from "react";
-import { switchTicketMode, ticketScanImage, ticketTemplateImage, type Ticket, type TicketTemplateVariant } from "../data";
+import { switchTicketMode, ticketScanImage, ticketTemplateImage, type Ticket, type TicketMotionPreset, type TicketTemplateVariant } from "../data";
 import { uploadImage } from "./media";
 
 type Props = {
@@ -18,6 +18,13 @@ const templateVariants: Array<{ value: TicketTemplateVariant; label: string }> =
   { value: "rail", label: "车票" },
   { value: "museum", label: "展览票" },
   { value: "cinema", label: "电影票" },
+];
+
+const motionPresets: Array<{ value: TicketMotionPreset; label: string }> = [
+  { value: "gentle", label: "温柔漂浮（推荐）" },
+  { value: "portrait", label: "人物上浮" },
+  { value: "stamp", label: "印章微转" },
+  { value: "tilt", label: "只保留整张倾斜" },
 ];
 
 function move<T>(items: T[], from: number, to: number) {
@@ -103,6 +110,26 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
     }
   }
 
+  async function uploadMotionLayer(event: ChangeEvent<HTMLInputElement>, field: "foregroundImage" | "stampImage", label: string) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !ticket) return;
+    const ticketId = ticket.id;
+    setBusy(field);
+    onBusyChange(true);
+    setMessage(`正在上传${label}…`);
+    try {
+      const image = await uploadImage(file, "tickets");
+      onChange(ticketId, (current) => ({ ...current, [field]: image.url }));
+      setMessage(`${label}已保存到草稿`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : `${label}上传失败`);
+    } finally {
+      setBusy("");
+      onBusyChange(false);
+    }
+  }
+
   if (!ticket) return <section className="admin-empty-state">
     <span aria-hidden="true">◫</span>
     <h2>先加入一张票根</h2>
@@ -170,6 +197,36 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
           <label className="admin-field"><span>强调色</span><div className="admin-color-field"><input type="color" value={ticket.accent} onChange={(event) => update("accent", event.target.value)} /><code>{ticket.accent}</code></div></label>
         </>}
       </div>
+
+      {ticket.variant === "scan" && <section className="ticket-motion-settings" aria-labelledby="ticket-motion-title">
+        <div>
+          <span className="admin-label" id="ticket-motion-title">票根动效</span>
+          <p>上传后自动生效；选择最接近票面重点的效果即可。</p>
+        </div>
+        <label className="admin-field"><span>动效样式</span><select value={ticket.motionPreset ?? "gentle"} onChange={(event) => update("motionPreset", event.target.value as TicketMotionPreset)}>
+          {motionPresets.map((preset) => <option key={preset.value} value={preset.value}>{preset.label}</option>)}
+        </select></label>
+        <details className="ticket-motion-layers">
+          <summary>高级分层（可选）</summary>
+          <p>没有透明图层也能使用自动动效。需要更准确时，可上传与票根同尺寸的透明 PNG。</p>
+          <div className="ticket-motion-layer-grid">
+            <div className="ticket-motion-layer-card">
+              <div>{ticket.foregroundImage ? <img src={ticket.foregroundImage} alt="人物前景层预览" /> : <span aria-hidden="true">人物</span>}<strong>人物前景层</strong></div>
+              <div className="admin-inline-actions">
+                <label className={`admin-upload-button${busy === "foregroundImage" ? " is-busy" : ""}`}><input type="file" accept="image/png,image/webp" onChange={(event) => void uploadMotionLayer(event, "foregroundImage", "人物前景层")} disabled={Boolean(busy) || disabled} />{ticket.foregroundImage ? "替换" : "上传"}</label>
+                {ticket.foregroundImage && <button type="button" className="admin-danger-link" onClick={() => update("foregroundImage", undefined)}>移除</button>}
+              </div>
+            </div>
+            <div className="ticket-motion-layer-card">
+              <div>{ticket.stampImage ? <img src={ticket.stampImage} alt="印章图层预览" /> : <span aria-hidden="true">印章</span>}<strong>印章图层</strong></div>
+              <div className="admin-inline-actions">
+                <label className={`admin-upload-button${busy === "stampImage" ? " is-busy" : ""}`}><input type="file" accept="image/png,image/webp" onChange={(event) => void uploadMotionLayer(event, "stampImage", "印章图层")} disabled={Boolean(busy) || disabled} />{ticket.stampImage ? "替换" : "上传"}</label>
+                {ticket.stampImage && <button type="button" className="admin-danger-link" onClick={() => update("stampImage", undefined)}>移除</button>}
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>}
 
       {ticket.variant !== "scan" && (ticket.variant === "scenic" || ticket.variant === "cinema" ? <div className="ticket-media-row">
         <div><span className="admin-label">样式票根背景</span><p>这张照片会嵌在票面里，不会替换整张票根。</p></div>

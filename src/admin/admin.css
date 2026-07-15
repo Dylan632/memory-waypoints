@@ -164,6 +164,17 @@
 .admin-upload-button input, .admin-mobile-upload input { position: absolute; width: 1px; height: 1px; overflow: hidden; opacity: 0; }
 .admin-upload-button.is-busy { opacity: .55; pointer-events: none; }
 .admin-appearance-fields { margin-top: 18px; }
+.ticket-motion-settings { margin-top: 22px; padding: 18px; display: grid; grid-template-columns: 1fr minmax(190px, 240px); gap: 14px 24px; border: 1px solid var(--admin-line); border-radius: var(--admin-r2); background: color-mix(in oklab, var(--admin-sidebar) 52%, var(--admin-paper)); }
+.ticket-motion-settings > div > p, .ticket-motion-layers > p { margin: 4px 0 0; color: var(--admin-muted); font-size: 11px; line-height: 1.6; }
+.ticket-motion-layers { grid-column: 1 / -1; border-top: 1px solid var(--admin-line); }
+.ticket-motion-layers summary { min-height: 42px; display: flex; align-items: center; color: var(--admin-accent); font-size: 11px; font-weight: 650; cursor: pointer; }
+.ticket-motion-layer-grid { margin-top: 12px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.ticket-motion-layer-card { min-width: 0; padding: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid var(--admin-line); border-radius: var(--admin-r1); background: var(--admin-paper); }
+.ticket-motion-layer-card > div:first-child { min-width: 0; display: flex; align-items: center; gap: 9px; font-size: 10px; }
+.ticket-motion-layer-card img, .ticket-motion-layer-card > div:first-child > span { width: 42px; height: 42px; flex: 0 0 auto; display: grid; place-items: center; border-radius: var(--admin-r1); object-fit: contain; background: var(--admin-sidebar); color: var(--admin-muted); font-size: 9px; }
+.ticket-motion-layer-card .admin-inline-actions { margin: 0; gap: 4px; }
+.ticket-motion-layer-card .admin-upload-button { min-height: 34px; padding-inline: 10px; }
+.ticket-motion-layer-card .admin-danger-link { min-height: 34px; }
 .admin-layout-details { margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--admin-line); }
 .admin-layout-details summary { min-height: 40px; display: flex; align-items: center; color: var(--admin-muted); font-size: 11px; cursor: pointer; }
 .admin-slider-grid { padding: 8px 0 4px; display: grid; gap: 15px; }

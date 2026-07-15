@@ -2,6 +2,7 @@ import type { Coordinate } from "./lib/trips.js";
 
 export type TicketVariant = "scenic" | "rail" | "museum" | "cinema" | "scan";
 export type TicketTemplateVariant = Exclude<TicketVariant, "scan">;
+export type TicketMotionPreset = "gentle" | "portrait" | "stamp" | "tilt";
 
 export type Ticket = {
   id: string;
@@ -16,6 +17,9 @@ export type Ticket = {
   templateRatio?: number;
   scanImage?: string;
   scanRatio?: number;
+  motionPreset?: TicketMotionPreset;
+  foregroundImage?: string;
+  stampImage?: string;
   accent: string;
   width: number;
   ratio: number;
