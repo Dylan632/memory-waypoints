@@ -108,7 +108,11 @@ button { color: inherit; }
   .ticket-code { animation: ticket-print-drift 3.2s -1.5s ease-in-out infinite; }
   .ticket-code span:nth-child(2n) { animation: ticket-bar-pulse 2.4s steps(3, end) infinite; transform-origin: center; }
   .ticket-art--scenic .ticket-body, .ticket-art--museum .ticket-body, .ticket-art--cinema .ticket-body { animation: ticket-pattern-wander 4.2s ease-in-out infinite; }
-  .ticket-art--scan img { animation: ticket-scan-drift 3.8s ease-in-out infinite; }
+  .ticket-scan-base { animation: ticket-scan-drift 3.8s ease-in-out infinite; }
+  .ticket-art--scan-portrait .ticket-scan-motion-layer--a { animation: ticket-scan-portrait-a 3.4s -.7s ease-in-out infinite; }
+  .ticket-art--scan-portrait .ticket-scan-motion-layer--b { animation: ticket-scan-portrait-b 3.8s -2s ease-in-out infinite; }
+  .ticket-art--scan-landscape .ticket-scan-motion-layer--a { animation: ticket-scan-landscape-a 4.2s -1.4s ease-in-out infinite; }
+  .ticket-art--scan-landscape .ticket-scan-motion-layer--b { animation: ticket-scan-landscape-b 4.6s -2.8s ease-in-out infinite; }
 }
 
 .ticket-art--scenic { background: #dcebf1; }
@@ -127,6 +131,11 @@ button { color: inherit; }
 .ticket-art--cinema .ticket-code { background: rgba(255,255,255,.14); }.ticket-art--cinema .ticket-code span { background: #f8ead2; }
 .ticket-art--scan { display: block; background: #eee9dd; }
 .ticket-art--scan img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ticket-scan-motion-layer { position: absolute; inset: 0; pointer-events: none; will-change: transform; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
+.ticket-art--scan-portrait .ticket-scan-motion-layer--a { -webkit-mask-image: radial-gradient(ellipse 42% 34% at 30% 79%, #000 40%, transparent 78%); mask-image: radial-gradient(ellipse 42% 34% at 30% 79%, #000 40%, transparent 78%); }
+.ticket-art--scan-portrait .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(ellipse 38% 32% at 76% 75%, #000 38%, transparent 78%); mask-image: radial-gradient(ellipse 38% 32% at 76% 75%, #000 38%, transparent 78%); }
+.ticket-art--scan-landscape .ticket-scan-motion-layer--a { -webkit-mask-image: radial-gradient(circle 26% at 27% 67%, #000 45%, transparent 76%); mask-image: radial-gradient(circle 26% at 27% 67%, #000 45%, transparent 76%); }
+.ticket-art--scan-landscape .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(circle 25% at 76% 30%, #000 45%, transparent 76%); mask-image: radial-gradient(circle 25% at 76% 30%, #000 45%, transparent 76%); }
 
 @keyframes ticket-ink-drift-a {
   0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 12px) rotate(-.08deg); }
@@ -156,6 +165,22 @@ button { color: inherit; }
 @keyframes ticket-scan-drift {
   0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 0) scale(1.002); }
   48% { transform: translate3d(calc(var(--ticket-print-x) + .35px), calc(var(--ticket-print-y) - .3px), 0) scale(1.002); }
+}
+@keyframes ticket-scan-portrait-a {
+  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 4px) rotate(-.08deg) scale(1.002); }
+  50% { transform: translate3d(calc(var(--ticket-ink-x) + 1.2px), calc(var(--ticket-ink-y) - .7px), 4px) rotate(.18deg) scale(1.002); }
+}
+@keyframes ticket-scan-portrait-b {
+  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 3px) rotate(.08deg) scale(1.002); }
+  50% { transform: translate3d(calc(var(--ticket-print-x) - 1px), calc(var(--ticket-print-y) + .55px), 3px) rotate(-.16deg) scale(1.002); }
+}
+@keyframes ticket-scan-landscape-a {
+  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 4px) rotate(-.12deg) scale(1.002); }
+  50% { transform: translate3d(calc(var(--ticket-ink-x) + .7px), calc(var(--ticket-ink-y) - .45px), 4px) rotate(.32deg) scale(1.002); }
+}
+@keyframes ticket-scan-landscape-b {
+  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 3px) rotate(.1deg) scale(1.002); }
+  50% { transform: translate3d(calc(var(--ticket-print-x) - .65px), calc(var(--ticket-print-y) + .4px), 3px) rotate(-.3deg) scale(1.002); }
 }
 
 .ticket-label { position: absolute; top: calc(100% + 11px); left: 50%; display: flex; gap: 9px; align-items: center; color: rgba(255,255,255,.74); font-size: 11px; white-space: nowrap; opacity: 0; transform: translate(-50%, 6px); transition: opacity 200ms ease-out, transform 200ms ease-out; }

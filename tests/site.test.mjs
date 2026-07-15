@@ -88,8 +88,14 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(css, /@keyframes\s+ticket-ink-drift-a/);
   assert.match(css, /@keyframes\s+ticket-print-drift/);
   assert.match(css, /@keyframes\s+ticket-pattern-wander/);
-  assert.match(css, /\.ticket-art--scan img\s*\{[^}]*animation:\s*ticket-scan-drift/s);
+  assert.match(css, /\.ticket-scan-base\s*\{[^}]*animation:\s*ticket-scan-drift/s);
+  assert.match(css, /@keyframes\s+ticket-scan-portrait-a/);
+  assert.match(css, /@keyframes\s+ticket-scan-landscape-b/);
+  assert.match(css, /\.ticket-art--scan-landscape \.ticket-scan-motion-layer--a\s*\{[^}]*mask-image:\s*radial-gradient/s);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*no-preference\)/);
+  assert.match(ticket, /ticket\.ratio\s*<\s*1\s*\?\s*"portrait"\s*:\s*"landscape"/);
+  assert.match(ticket, /ticket-scan-motion-layer--a/);
+  assert.match(ticket, /ticket-scan-motion-layer--b/);
   assert.match(ticket, /setProperty\("--ticket-ink-x"/);
   assert.match(ticket, /setProperty\("--ticket-print-x"/);
 });
