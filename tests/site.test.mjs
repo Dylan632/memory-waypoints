@@ -68,3 +68,12 @@ test("admin keeps the full editor on desktop and a focused quick-upload surface 
   assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.admin-desktop-shell\s*\{[^}]*display:\s*none/s);
   assert.match(css, /@media\s*\(max-width:\s*760px\)[\s\S]*\.admin-mobile-quick\s*\{[^}]*display:\s*flex/s);
 });
+
+test("admin uses the warm Kami palette with restrained ink-blue actions", async () => {
+  const css = await readFile(new URL("../src/admin/admin.css", import.meta.url), "utf8");
+
+  assert.match(css, /--admin-canvas:\s*#f5f4ed/);
+  assert.match(css, /--admin-paper:\s*#faf9f5/);
+  assert.match(css, /--admin-accent:\s*#1b365d/);
+  assert.match(css, /\.admin-primary,[\s\S]*background:\s*var\(--admin-accent\)/);
+});
