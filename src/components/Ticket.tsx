@@ -35,18 +35,30 @@ export function Ticket({ ticket, onOpen }: { ticket: TicketData; onOpen: (select
     const element = tiltRef.current;
     if (!element) return;
     const rect = element.getBoundingClientRect();
-    const rotateY = ((event.clientX - rect.left) / rect.width - 0.5) * 10;
-    const rotateX = -((event.clientY - rect.top) / rect.height - 0.5) * 10;
+    const pointerX = (event.clientX - rect.left) / rect.width - 0.5;
+    const pointerY = (event.clientY - rect.top) / rect.height - 0.5;
+    const rotateY = pointerX * 10;
+    const rotateX = -pointerY * 10;
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
     frameRef.current = requestAnimationFrame(() => {
       element.style.transform = `perspective(600px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
+      element.style.setProperty("--ticket-ink-x", `${(pointerX * 2.4).toFixed(2)}px`);
+      element.style.setProperty("--ticket-ink-y", `${(pointerY * 2.4).toFixed(2)}px`);
+      element.style.setProperty("--ticket-print-x", `${(-pointerX * 1.6).toFixed(2)}px`);
+      element.style.setProperty("--ticket-print-y", `${(-pointerY * 1.6).toFixed(2)}px`);
     });
   }
 
   function reset() {
     const element = tiltRef.current;
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    if (element) element.style.transform = "";
+    if (element) {
+      element.style.transform = "";
+      element.style.removeProperty("--ticket-ink-x");
+      element.style.removeProperty("--ticket-ink-y");
+      element.style.removeProperty("--ticket-print-x");
+      element.style.removeProperty("--ticket-print-y");
+    }
   }
 
   const slotStyle = {

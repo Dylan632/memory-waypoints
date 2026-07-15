@@ -75,5 +75,21 @@ test("admin uses the warm Kami palette with restrained ink-blue actions", async 
   assert.match(css, /--admin-canvas:\s*#f5f4ed/);
   assert.match(css, /--admin-paper:\s*#faf9f5/);
   assert.match(css, /--admin-accent:\s*#1b365d/);
+  assert.match(css, /--admin-rail:\s*#1b365d/);
   assert.match(css, /\.admin-primary,[\s\S]*background:\s*var\(--admin-accent\)/);
+  assert.match(css, /\.admin-trip-sidebar\s*\{[^}]*background:\s*var\(--admin-rail\)/s);
+  assert.match(css, /\.admin-workspace-content\s*>\s*\*\s*\{[^}]*background:\s*var\(--admin-paper\)/s);
+});
+
+test("ticket ink, artwork and scans have independent restrained motion", async () => {
+  const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
+  const ticket = await readFile(new URL("../src/components/Ticket.tsx", import.meta.url), "utf8");
+
+  assert.match(css, /@keyframes\s+ticket-ink-drift-a/);
+  assert.match(css, /@keyframes\s+ticket-print-drift/);
+  assert.match(css, /@keyframes\s+ticket-pattern-wander/);
+  assert.match(css, /\.ticket-art--scan img\s*\{[^}]*animation:\s*ticket-scan-drift/s);
+  assert.match(css, /@media\s*\(prefers-reduced-motion:\s*no-preference\)/);
+  assert.match(ticket, /setProperty\("--ticket-ink-x"/);
+  assert.match(ticket, /setProperty\("--ticket-print-x"/);
 });
