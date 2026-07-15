@@ -35,18 +35,18 @@ export function Ticket({ ticket, onOpen }: { ticket: TicketData; onOpen: (select
     const element = tiltRef.current;
     if (!element) return;
     const rect = element.getBoundingClientRect();
-    const rotateY = ((event.clientX - rect.left) / rect.width - 0.5) * 9;
-    const rotateX = -((event.clientY - rect.top) / rect.height - 0.5) * 9;
+    const rotateY = ((event.clientX - rect.left) / rect.width - 0.5) * 10;
+    const rotateX = -((event.clientY - rect.top) / rect.height - 0.5) * 10;
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
     frameRef.current = requestAnimationFrame(() => {
-      element.style.transform = `perspective(700px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale(1.012)`;
+      element.style.transform = `perspective(600px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg)`;
     });
   }
 
   function reset() {
     const element = tiltRef.current;
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
-    if (element) element.style.transform = "perspective(700px) rotateX(0deg) rotateY(0deg) scale(1)";
+    if (element) element.style.transform = "";
   }
 
   const slotStyle = {
@@ -61,6 +61,7 @@ export function Ticket({ ticket, onOpen }: { ticket: TicketData; onOpen: (select
       ref={tiltRef}
       type="button"
       className="ticket-button"
+      data-tilt-touch
       aria-label={`打开回忆：${ticket.title}`}
       aria-haspopup="dialog"
       onPointerMove={move}

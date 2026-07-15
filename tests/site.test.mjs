@@ -47,7 +47,7 @@ test("production build includes the private travel editor without replacing the 
 test("published trips immediately select the first map chapter", async () => {
   const app = await readFile(new URL("../src/App.tsx", import.meta.url), "utf8");
 
-  assert.match(app, /loadPublishedTrips[\s\S]*setTrips\(published\);[\s\S]*setActiveId\(sortTrips\(published, "newest"\)\[0\]\.id\)/);
+  assert.match(app, /loadPublishedTrips[\s\S]*setTrips\(published\);[\s\S]*setScene\(\{ from: null, to: sortTrips\(published, "newest"\)\[0\], progress: 1 \}\)/);
 });
 
 test("admin keeps the full editor on desktop and a focused quick-upload surface on mobile", async () => {
