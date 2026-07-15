@@ -56,9 +56,19 @@ button { color: inherit; }
 .sort-toggle button:active { transform: scale(.96); }
 .sort-toggle button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 
-.qq-soundtrack { position: fixed; z-index: 900; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); width: 64px; height: 64px; overflow: hidden; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(20,22,22,.78); box-shadow: 0 8px 24px rgba(0,0,0,.28); backdrop-filter: blur(12px); transition: width 240ms ease, height 240ms ease, border-radius 240ms ease; }
-.qq-soundtrack iframe { display: block; width: 320px; height: 84px; border: 0; transform: translateY(-10px); transition: transform 240ms ease; }
-@media (hover: hover) { .qq-soundtrack:hover, .qq-soundtrack:focus-within { width: 320px; height: 84px; border-radius: 12px; }.qq-soundtrack:hover iframe, .qq-soundtrack:focus-within iframe { transform: none; } }
+.qq-soundtrack { position: fixed; z-index: 900; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); }
+.music-toggle { display: grid; width: 44px; height: 44px; place-items: center; padding: 0; border: 1px solid rgba(255,255,255,.2); border-radius: 50%; color: rgba(255,255,255,.88); background: rgba(20,22,22,.68); box-shadow: 0 7px 22px rgba(0,0,0,.24); backdrop-filter: blur(12px); cursor: pointer; transition: background-color 180ms ease, border-color 180ms ease, transform 180ms ease; }
+.music-toggle:hover, .music-toggle.is-open { border-color: rgba(255,255,255,.42); background: rgba(28,30,30,.86); }
+.music-toggle:active { transform: scale(.95); }
+.music-toggle:focus-visible, .music-panel button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.music-toggle svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.music-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(340px, calc(100vw - 32px)); padding: 10px; border: 1px solid rgba(255,255,255,.18); border-radius: 16px; visibility: hidden; background: rgba(20,22,22,.88); box-shadow: 0 16px 46px rgba(0,0,0,.38); opacity: 0; pointer-events: none; transform: translateY(-8px) scale(.98); transform-origin: top right; backdrop-filter: blur(18px); transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease; }
+.music-panel.is-open { visibility: visible; opacity: 1; pointer-events: auto; transform: none; }
+.music-panel header { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 8px 5px; color: rgba(255,255,255,.82); }
+.music-panel header strong { font-size: 13px; font-weight: 600; letter-spacing: .04em; }
+.music-panel header button { width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; color: rgba(255,255,255,.66); background: transparent; font-size: 23px; line-height: 1; cursor: pointer; }
+.music-panel header button:hover { color: #fff; background: rgba(255,255,255,.1); }
+.music-panel iframe { display: block; width: 100%; height: 84px; border: 0; border-radius: 10px; }
 
 .trip-block { position: relative; }
 .trip-section { position: relative; min-height: 50vh; padding: 40px 24px; }
@@ -162,6 +172,7 @@ button { color: inherit; }
   .map-caption { display: none; }
   .story-scroll::-webkit-scrollbar { width: 4px; }
   .qq-soundtrack { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
+  .music-panel { position: fixed; top: 68px; right: 12px; width: min(340px, calc(100vw - 24px)); }
   .story-inner { width: 100%; padding: 18vh 0; }
   .site-intro { padding: 40px 20px; }
   .intro-index { margin-bottom: 14px; }

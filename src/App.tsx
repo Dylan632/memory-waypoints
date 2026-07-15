@@ -122,12 +122,47 @@ function StoryApp() {
 }
 
 function QQMusicSoundtrack() {
-  return <aside className="qq-soundtrack" aria-label="QQ 音乐背景音乐《To April》">
-    <iframe
-      src={QQ_MUSIC_PLAYER_URL}
-      title="QQ 音乐播放器：《To April》—高姗"
-      allow="autoplay; encrypted-media"
-      loading="eager"
-    />
+  const [isOpen, setIsOpen] = useState(false);
+  const rootRef = useRef<HTMLElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const close = (event: KeyboardEvent | PointerEvent) => {
+      if (event instanceof KeyboardEvent && event.key !== "Escape") return;
+      if (event instanceof PointerEvent && rootRef.current?.contains(event.target as Node)) return;
+      setIsOpen(false);
+      if (event instanceof KeyboardEvent) toggleRef.current?.focus();
+    };
+    document.addEventListener("keydown", close);
+    document.addEventListener("pointerdown", close);
+    return () => { document.removeEventListener("keydown", close); document.removeEventListener("pointerdown", close); };
+  }, [isOpen]);
+
+  return <aside ref={rootRef} className="qq-soundtrack" aria-label="QQ 音乐背景音乐《To April》">
+    <button
+      ref={toggleRef}
+      type="button"
+      className={`music-toggle${isOpen ? " is-open" : ""}`}
+      onClick={() => setIsOpen((open) => !open)}
+      aria-label={isOpen ? "收起音乐播放器" : "打开音乐播放器"}
+      aria-expanded={isOpen}
+      aria-controls="qq-music-panel"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 18V5L19 3V16" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="16" cy="16" r="3" />
+      </svg>
+    </button>
+    <section id="qq-music-panel" className={`music-panel${isOpen ? " is-open" : ""}`} aria-hidden={!isOpen}>
+      <header><strong>To April</strong><button type="button" onClick={() => { setIsOpen(false); toggleRef.current?.focus(); }} aria-label="收起音乐播放器">×</button></header>
+      <iframe
+        src={QQ_MUSIC_PLAYER_URL}
+        title="QQ 音乐播放器：《To April》—高姗"
+        allow="autoplay; encrypted-media"
+        loading="lazy"
+      />
+    </section>
   </aside>;
 }

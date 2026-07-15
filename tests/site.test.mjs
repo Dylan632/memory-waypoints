@@ -22,6 +22,9 @@ test("production build embeds the official To April player", async () => {
   const app = await readFile(new URL("../src/App.tsx", import.meta.url), "utf8");
   assert.match(app, /<iframe[\s\S]*allow="autoplay; encrypted-media"/);
   assert.match(app, /To April/);
+  assert.match(app, /aria-controls="qq-music-panel"/);
+  assert.match(app, /aria-expanded=\{isOpen\}/);
+  assert.match(app, /aria-hidden=\{!isOpen\}/);
 });
 
 test("mobile tickets are capped to the viewport and recentered", async () => {
