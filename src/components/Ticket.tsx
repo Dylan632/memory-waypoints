@@ -14,7 +14,14 @@ export function TicketArtwork({ ticket }: { ticket: TicketData }) {
       <img className="ticket-scan-base" src={scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
       {motionPreset === "landmarks" ? <>
         <img className="ticket-scan-motion-layer ticket-scan-landmark-wheel" src={scanImage} alt="" aria-hidden="true" />
-        <img className="ticket-scan-motion-layer ticket-scan-landmark-bridge" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-a" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-b" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-c" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-d" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-walker-a" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-walker-b" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-sitter-a" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-sitter-b" src={scanImage} alt="" aria-hidden="true" />
         {ticket.foregroundImage && <img className="ticket-scan-motion-layer ticket-scan-motion-layer--a ticket-scan-motion-layer--custom" src={ticket.foregroundImage} alt="" aria-hidden="true" />}
         {ticket.stampImage && <img className="ticket-scan-motion-layer ticket-scan-motion-layer--b ticket-scan-motion-layer--custom" src={ticket.stampImage} alt="" aria-hidden="true" />}
       </> : motionPreset !== "tilt" && <>
