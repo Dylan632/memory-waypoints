@@ -115,8 +115,15 @@ button { color: inherit; }
   .ticket-art--scan-landscape .ticket-scan-motion-layer--b { animation: ticket-scan-landscape-b 4.6s -2.8s ease-in-out infinite; }
   .ticket-art--motion-portrait .ticket-scan-motion-layer--a { animation: ticket-scan-figure-float 3.8s -.8s ease-in-out infinite; }
   .ticket-art--motion-stamp .ticket-scan-motion-layer--b { animation: ticket-scan-stamp-turn 4.1s -1.6s ease-in-out infinite; }
-  .ticket-art--motion-landmarks .ticket-scan-landmark-wheel { animation: ticket-landmark-wheel-turn 5.8s -1.4s ease-in-out infinite; }
-  .ticket-art--motion-landmarks .ticket-scan-landmark-bridge { animation: ticket-landmark-bridge-drift 4.8s -2s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-wheel { animation: ticket-landmark-wheel-turn 18s linear infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-a { animation: ticket-ink-drift-a 2.7s -.9s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-b { animation: ticket-ink-drift-b 3.2s -2.1s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-c { animation: ticket-ink-drift-c 2.9s -1.6s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-d { animation: ticket-print-drift 3.4s -.5s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-walker-a { animation: ticket-landmark-walk 4.8s -1.1s ease-in-out infinite alternate; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-walker-b { animation: ticket-landmark-walk 5.6s -3.8s ease-in-out infinite alternate-reverse; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-a { animation: ticket-scan-landscape-a 3.7s -1.8s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-b { animation: ticket-scan-landscape-b 4.2s -2.4s ease-in-out infinite; }
 }
 
 .ticket-art--scenic { background: #dcebf1; }
@@ -141,8 +148,15 @@ button { color: inherit; }
 .ticket-art--scan-portrait .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(ellipse at 76% 75%, #000 0 22%, transparent 40%); mask-image: radial-gradient(ellipse at 76% 75%, #000 0 22%, transparent 40%); }
 .ticket-art--scan-landscape .ticket-scan-motion-layer--a { -webkit-mask-image: radial-gradient(circle at 27% 67%, #000 0 16%, transparent 27%); mask-image: radial-gradient(circle at 27% 67%, #000 0 16%, transparent 27%); }
 .ticket-art--scan-landscape .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(circle at 76% 30%, #000 0 15%, transparent 26%); mask-image: radial-gradient(circle at 76% 30%, #000 0 15%, transparent 26%); }
-.ticket-scan-landmark-wheel { transform-origin: 85.5% 32%; -webkit-mask-image: radial-gradient(circle at 85.5% 32%, #000 0 6.2%, transparent 7.1%); mask-image: radial-gradient(circle at 85.5% 32%, #000 0 6.2%, transparent 7.1%); }
-.ticket-scan-landmark-bridge { -webkit-mask-image: linear-gradient(to bottom, transparent 0 58%, #000 63% 86%, transparent 92%); mask-image: linear-gradient(to bottom, transparent 0 58%, #000 63% 86%, transparent 92%); }
+.ticket-scan-landmark-wheel { transform-origin: 72.5% 32%; -webkit-mask-image: radial-gradient(circle at 72.5% 32%, #000 0 4.25%, transparent 4.9%); mask-image: radial-gradient(circle at 72.5% 32%, #000 0 4.25%, transparent 4.9%); }
+.ticket-scan-landmark-copy-a { -webkit-mask-image: radial-gradient(ellipse 7% 11% at 16% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 7% 11% at 16% 30%, #000 0 79%, transparent 100%); }
+.ticket-scan-landmark-copy-b { -webkit-mask-image: radial-gradient(ellipse 7% 11% at 28% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 7% 11% at 28% 30%, #000 0 79%, transparent 100%); }
+.ticket-scan-landmark-copy-c { -webkit-mask-image: radial-gradient(ellipse 7% 11% at 41% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 7% 11% at 41% 30%, #000 0 79%, transparent 100%); }
+.ticket-scan-landmark-copy-d { -webkit-mask-image: radial-gradient(ellipse 8% 11% at 54% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 8% 11% at 54% 30%, #000 0 79%, transparent 100%); }
+.ticket-scan-landmark-walker-a { transform-origin: 9.2% 56.5%; -webkit-mask-image: radial-gradient(ellipse 1.5% 6% at 9.2% 56.5%, #000 0 62%, transparent 100%); mask-image: radial-gradient(ellipse 1.5% 6% at 9.2% 56.5%, #000 0 62%, transparent 100%); }
+.ticket-scan-landmark-walker-b { transform-origin: 38.7% 57%; -webkit-mask-image: radial-gradient(ellipse 1.7% 6.3% at 38.7% 57%, #000 0 62%, transparent 100%); mask-image: radial-gradient(ellipse 1.7% 6.3% at 38.7% 57%, #000 0 62%, transparent 100%); }
+.ticket-scan-landmark-sitter-a { transform-origin: 45.5% 61.5%; -webkit-mask-image: radial-gradient(ellipse 2.7% 5.5% at 45.5% 61.5%, #000 0 65%, transparent 100%); mask-image: radial-gradient(ellipse 2.7% 5.5% at 45.5% 61.5%, #000 0 65%, transparent 100%); }
+.ticket-scan-landmark-sitter-b { transform-origin: 55.8% 80.5%; -webkit-mask-image: radial-gradient(ellipse 2.8% 5.5% at 55.8% 80.5%, #000 0 65%, transparent 100%); mask-image: radial-gradient(ellipse 2.8% 5.5% at 55.8% 80.5%, #000 0 65%, transparent 100%); }
 
 @keyframes ticket-ink-drift-a {
   0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 12px) rotate(-.08deg); }
@@ -198,12 +212,14 @@ button { color: inherit; }
   50% { transform: translate3d(calc(var(--ticket-print-x) - .7px), calc(var(--ticket-print-y) + .5px), 7px) rotate(1.8deg) scale(1.006); }
 }
 @keyframes ticket-landmark-wheel-turn {
-  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 10px) rotate(-1.2deg) scale(1.006); }
-  50% { transform: translate3d(calc(var(--ticket-ink-x) + .2px), calc(var(--ticket-ink-y) - .25px), 10px) rotate(2.6deg) scale(1.008); }
+  to { transform: rotate(360deg); }
 }
-@keyframes ticket-landmark-bridge-drift {
-  0%, 100% { transform: translate3d(calc(var(--ticket-print-x) - .75px), var(--ticket-print-y), 6px) scale(1.002); }
-  50% { transform: translate3d(calc(var(--ticket-print-x) + .85px), calc(var(--ticket-print-y) - .65px), 6px) scale(1.004); }
+@keyframes ticket-landmark-walk {
+  0% { transform: translate3d(-5px, .5px, 7px) rotate(-.5deg); }
+  25% { transform: translate3d(-2px, -1.5px, 7px) rotate(.35deg); }
+  50% { transform: translate3d(1px, .5px, 7px) rotate(-.35deg); }
+  75% { transform: translate3d(4px, -1.5px, 7px) rotate(.35deg); }
+  100% { transform: translate3d(7px, .5px, 7px) rotate(-.5deg); }
 }
 
 .ticket-label { position: absolute; top: calc(100% + 11px); left: 50%; display: flex; gap: 9px; align-items: center; color: rgba(255,255,255,.74); font-size: 11px; white-space: nowrap; opacity: 0; transform: translate(-50%, 6px); transition: opacity 200ms ease-out, transform 200ms ease-out; }
