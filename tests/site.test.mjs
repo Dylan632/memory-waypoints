@@ -92,6 +92,7 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(css, /@keyframes\s+ticket-scan-portrait-a/);
   assert.match(css, /@keyframes\s+ticket-scan-landscape-b/);
   assert.match(css, /@keyframes\s+ticket-landmark-wheel-turn/);
+  assert.match(css, /@keyframes\s+ticket-landmark-walk/);
   assert.match(css, /ticket-scan-landmark-wheel/);
   assert.match(css, /\.ticket-art--scan-landscape \.ticket-scan-motion-layer--a\s*\{[^}]*mask-image:\s*radial-gradient/s);
   assert.match(css, /@media\s*\(prefers-reduced-motion:\s*no-preference\)/);
@@ -109,9 +110,10 @@ test("admin can choose uploaded ticket motion and add optional artwork layers", 
   assert.match(editor, /票根动效/);
   assert.match(editor, /人物前景层/);
   assert.match(editor, /印章图层/);
-  assert.match(editor, /地标联动（摩天轮与桥）/);
+  assert.match(editor, /东湖之眼（摩天轮与栈桥）/);
   assert.match(ticket, /ticket\.motionPreset\s*\?\?/);
   assert.match(ticket, /ticket\.foregroundImage/);
   assert.match(ticket, /ticket\.stampImage/);
   assert.match(ticket, /ticket-scan-landmark-wheel/);
+  assert.match(ticket, /ticket-scan-landmark-walker-a/);
 });
