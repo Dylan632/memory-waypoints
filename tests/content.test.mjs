@@ -40,6 +40,9 @@ const clone = () => structuredClone(validTrips);
 
 test("validateTrips accepts a complete trip including scanned tickets", () => {
   assert.deepEqual(validateTrips(clone()), validTrips);
+  const wideTicket = clone();
+  wideTicket[0].tickets[0].width = 1040;
+  assert.doesNotThrow(() => validateTrips(wideTicket));
   const scanWithoutTemplateMetadata = clone();
   scanWithoutTemplateMetadata[0].tickets[0].subtitle = "";
   scanWithoutTemplateMetadata[0].tickets[0].serial = "";
@@ -107,6 +110,10 @@ test("validateTrips rejects empty, unsafe, duplicate, and malformed content", ()
   const badSize = clone();
   badSize[0].tickets[0].width = 0;
   assert.throws(() => validateTrips(badSize), /width/i);
+
+  const tooWide = clone();
+  tooWide[0].tickets[0].width = 1121;
+  assert.throws(() => validateTrips(tooWide), /width/i);
 
   const missingScan = clone();
   delete missingScan[0].tickets[0].image;
