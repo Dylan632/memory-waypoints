@@ -124,6 +124,9 @@ button { color: inherit; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-walker-b { animation: ticket-landmark-walk 5.6s -3.8s ease-in-out infinite alternate-reverse; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-a { animation: ticket-scan-landscape-a 3.7s -1.8s ease-in-out infinite; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-b { animation: ticket-scan-landscape-b 4.2s -2.4s ease-in-out infinite; }
+  .ticket-art--east-lake-eye .ticket-scan-base { animation: none; }
+  .ticket-art--east-lake-eye .ticket-east-lake-wheel { animation: ticket-east-lake-wheel-turn 24s linear infinite; }
+  .ticket-art--east-lake-eye .ticket-east-lake-sunlight { animation: ticket-east-lake-sunlight-shimmer 3.8s -1.1s ease-in-out infinite; }
 }
 
 .ticket-art--scenic { background: #dcebf1; }
@@ -142,6 +145,10 @@ button { color: inherit; }
 .ticket-art--cinema .ticket-code { background: rgba(255,255,255,.14); }.ticket-art--cinema .ticket-code span { background: #f8ead2; }
 .ticket-art--scan { display: block; background: #eee9dd; }
 .ticket-art--scan img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.ticket-art--east-lake-eye .ticket-east-lake-wheel-clean { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; -webkit-mask-image: radial-gradient(circle at 72.33% 32.88%, #000 0 4.15%, rgb(0 0 0 / 94%) 4.3%, transparent 4.6%); mask-image: radial-gradient(circle at 72.33% 32.88%, #000 0 4.15%, rgb(0 0 0 / 94%) 4.3%, transparent 4.6%); }
+.ticket-art--east-lake-eye .ticket-east-lake-wheel-clean img { width: 100%; height: 100%; object-fit: fill; transform: translateX(7%); }
+.ticket-art--east-lake-eye img.ticket-east-lake-wheel { position: absolute; z-index: 2; left: 67.174%; top: 18.207%; width: 10.276%; height: auto; object-fit: contain; pointer-events: none; will-change: transform; transform-origin: 50.1% 48.2%; clip-path: circle(36% at 50.1% 48.2%); mix-blend-mode: multiply; }
+.ticket-art--east-lake-eye img.ticket-east-lake-sunlight { position: absolute; z-index: 2; inset: 0; width: 100%; height: 100%; object-fit: fill; opacity: .16; pointer-events: none; will-change: transform, opacity, filter; transform-origin: 33.6% 63%; filter: brightness(1.18) saturate(1.08); mix-blend-mode: screen; -webkit-mask-image: radial-gradient(ellipse 2.7% 6.6% at 33.43% 53.7%, #000 0 56%, rgb(0 0 0 / 62%) 78%, transparent 100%), radial-gradient(ellipse 1.7% 3.8% at 33.6% 71.9%, #000 0 52%, rgb(0 0 0 / 58%) 76%, transparent 100%); mask-image: radial-gradient(ellipse 2.7% 6.6% at 33.43% 53.7%, #000 0 56%, rgb(0 0 0 / 62%) 78%, transparent 100%), radial-gradient(ellipse 1.7% 3.8% at 33.6% 71.9%, #000 0 52%, rgb(0 0 0 / 58%) 76%, transparent 100%); }
 .ticket-scan-motion-layer { position: absolute; inset: 0; pointer-events: none; will-change: transform; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
 .ticket-scan-motion-layer--custom { -webkit-mask-image: none !important; mask-image: none !important; }
 .ticket-art--scan-portrait .ticket-scan-motion-layer--a { -webkit-mask-image: radial-gradient(ellipse at 30% 79%, #000 0 24%, transparent 42%); mask-image: radial-gradient(ellipse at 30% 79%, #000 0 24%, transparent 42%); }
@@ -213,6 +220,14 @@ button { color: inherit; }
 }
 @keyframes ticket-landmark-wheel-turn {
   to { transform: rotate(360deg); }
+}
+@keyframes ticket-east-lake-wheel-turn {
+  to { transform: rotate(360deg); }
+}
+@keyframes ticket-east-lake-sunlight-shimmer {
+  0%, 100% { opacity: .12; transform: translate3d(-.12%, 0, 4px) scaleX(.985); filter: brightness(1.08) saturate(1.04); }
+  42% { opacity: .25; transform: translate3d(.16%, -.12%, 4px) scaleX(1.055); filter: brightness(1.3) saturate(1.12); }
+  73% { opacity: .17; transform: translate3d(-.06%, .1%, 4px) scaleX(1.015); filter: brightness(1.18) saturate(1.08); }
 }
 @keyframes ticket-landmark-walk {
   0% { transform: translate3d(-5px, .5px, 7px) rotate(-.5deg); }

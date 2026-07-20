@@ -84,6 +84,7 @@ test("admin uses the warm Kami palette with restrained ink-blue actions", async 
 test("ticket ink, artwork and scans have independent restrained motion", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
   const ticket = await readFile(new URL("../src/components/Ticket.tsx", import.meta.url), "utf8");
+  const eastLakeWheel = await readFile(new URL("../public/memories/east-lake-eye/wheel.jpg", import.meta.url));
 
   assert.match(css, /@keyframes\s+ticket-ink-drift-a/);
   assert.match(css, /@keyframes\s+ticket-print-drift/);
@@ -101,10 +102,16 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(ticket, /ticket-scan-motion-layer--b/);
   assert.match(ticket, /setProperty\("--ticket-ink-x"/);
   assert.match(ticket, /setProperty\("--ticket-print-x"/);
-  assert.match(ticket, /east-lake-eye-ticket-2021"\s*\?\s*"tilt"\s*:\s*ticket\.motionPreset/);
+  assert.match(ticket, /isEastLakeEye\s*\?\s*"tilt"\s*:\s*ticket\.motionPreset/);
   assert.match(ticket, /east-lake-eye-ticket-2021"\s*\?\s*1040\s*:\s*ticket\.width/);
-  assert.doesNotMatch(ticket, /ticket-east-lake-/);
-  assert.doesNotMatch(css, /ticket-east-lake-/);
+  assert.match(ticket, /ticket-east-lake-wheel/);
+  assert.match(ticket, /ticket-east-lake-sunlight/);
+  assert.match(ticket, /memories\/east-lake-eye\/wheel\.jpg/);
+  assert.match(css, /@keyframes\s+ticket-east-lake-wheel-turn/);
+  assert.match(css, /@keyframes\s+ticket-east-lake-sunlight-shimmer/);
+  assert.match(css, /ticket-east-lake-wheel-clean/);
+  assert.ok(eastLakeWheel.byteLength > 10_000, "expected the East Lake wheel artwork");
+  assert.doesNotMatch(ticket, /ticket-east-lake-(yellow|green|walker|diver|copy)/);
 });
 
 test("admin can choose uploaded ticket motion and add optional artwork layers", async () => {

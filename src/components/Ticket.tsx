@@ -8,11 +8,16 @@ export function TicketArtwork({ ticket }: { ticket: TicketData }) {
   const templateImage = ticketTemplateImage(ticket);
   const style = { "--ticket-accent": ticket.accent, "--ticket-image": templateImage ? `url(${templateImage})` : "none" } as CSSProperties;
   if (ticket.variant === "scan" && scanImage) {
+    const isEastLakeEye = ticket.id === "east-lake-eye-ticket-2021";
     const orientation = ticket.ratio < 1 ? "portrait" : "landscape";
-    const motionPreset = ticket.id === "east-lake-eye-ticket-2021" ? "tilt" : ticket.motionPreset ?? "gentle";
-    return <div className={`ticket-art ticket-art--scan ticket-art--scan-${orientation} ticket-art--motion-${motionPreset}`} style={style}>
+    const motionPreset = isEastLakeEye ? "tilt" : ticket.motionPreset ?? "gentle";
+    return <div className={`ticket-art ticket-art--scan ticket-art--scan-${orientation} ticket-art--motion-${motionPreset}${isEastLakeEye ? " ticket-art--east-lake-eye" : ""}`} style={style}>
       <img className="ticket-scan-base" src={scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
-      {motionPreset === "landmarks" ? <>
+      {isEastLakeEye ? <>
+        <span className="ticket-east-lake-wheel-clean" aria-hidden="true"><img src={scanImage} alt="" /></span>
+        <img className="ticket-east-lake-wheel" src="/memories/east-lake-eye/wheel.jpg" alt="" aria-hidden="true" />
+        <img className="ticket-east-lake-sunlight" src={scanImage} alt="" aria-hidden="true" />
+      </> : motionPreset === "landmarks" ? <>
         <img className="ticket-scan-motion-layer ticket-scan-landmark-wheel" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-a" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-b" src={scanImage} alt="" aria-hidden="true" />
