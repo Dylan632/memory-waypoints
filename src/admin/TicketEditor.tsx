@@ -24,7 +24,7 @@ const motionPresets: Array<{ value: TicketMotionPreset; label: string }> = [
   { value: "gentle", label: "温柔漂浮（推荐）" },
   { value: "portrait", label: "人物上浮" },
   { value: "stamp", label: "印章微转" },
-  { value: "landmarks", label: "地标联动（摩天轮与桥）" },
+  { value: "landmarks", label: "东湖之眼（摩天轮与栈桥）" },
   { value: "tilt", label: "只保留整张倾斜" },
 ];
 
@@ -207,7 +207,7 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
         <label className="admin-field"><span>动效样式</span><select value={ticket.motionPreset ?? "gentle"} onChange={(event) => update("motionPreset", event.target.value as TicketMotionPreset)}>
           {motionPresets.map((preset) => <option key={preset.value} value={preset.value}>{preset.label}</option>)}
         </select></label>
-        {ticket.motionPreset === "landmarks" && <p className="admin-field-hint ticket-landmark-hint">适合画面里已有摩天轮与桥的横版票根：摩天轮会轻微转动，桥面会有一层很小的景深漂浮。无需另做票根图；若地标位置差异很大，再使用下方的高级分层。</p>}
+        {ticket.motionPreset === "landmarks" && <p className="admin-field-hint ticket-landmark-hint">已按“东湖之眼”票面校准：摩天轮缓慢转动，两位小人来回走动，停坐的人物只保留很轻的呼吸感。</p>}
         <details className="ticket-motion-layers">
           <summary>高级分层（可选）</summary>
           <p>没有透明图层也能使用自动动效。需要更准确时，可上传与票根同尺寸的透明 PNG。</p>
