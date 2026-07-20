@@ -8,7 +8,7 @@ type ContentFetcher = (url: string) => Promise<FetchResponse>;
 const ID_PATTERN = /^[a-z0-9](?:[a-z0-9_-]{0,99})$/i;
 const COLOR_PATTERN = /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i;
 const VARIANTS = new Set<TicketVariant>(["scenic", "rail", "museum", "cinema", "scan"]);
-const MOTION_PRESETS = new Set<TicketMotionPreset>(["gentle", "portrait", "stamp", "tilt"]);
+const MOTION_PRESETS = new Set<TicketMotionPreset>(["gentle", "portrait", "stamp", "landmarks", "tilt"]);
 const MAP_TONES = new Set<Trip["mapTone"]>(["night", "paper", "mist"]);
 
 function fail(path: string, message: string): never {

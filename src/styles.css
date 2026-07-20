@@ -115,6 +115,8 @@ button { color: inherit; }
   .ticket-art--scan-landscape .ticket-scan-motion-layer--b { animation: ticket-scan-landscape-b 4.6s -2.8s ease-in-out infinite; }
   .ticket-art--motion-portrait .ticket-scan-motion-layer--a { animation: ticket-scan-figure-float 3.8s -.8s ease-in-out infinite; }
   .ticket-art--motion-stamp .ticket-scan-motion-layer--b { animation: ticket-scan-stamp-turn 4.1s -1.6s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-wheel { animation: ticket-landmark-wheel-turn 5.8s -1.4s ease-in-out infinite; }
+  .ticket-art--motion-landmarks .ticket-scan-landmark-bridge { animation: ticket-landmark-bridge-drift 4.8s -2s ease-in-out infinite; }
 }
 
 .ticket-art--scenic { background: #dcebf1; }
@@ -139,6 +141,8 @@ button { color: inherit; }
 .ticket-art--scan-portrait .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(ellipse at 76% 75%, #000 0 22%, transparent 40%); mask-image: radial-gradient(ellipse at 76% 75%, #000 0 22%, transparent 40%); }
 .ticket-art--scan-landscape .ticket-scan-motion-layer--a { -webkit-mask-image: radial-gradient(circle at 27% 67%, #000 0 16%, transparent 27%); mask-image: radial-gradient(circle at 27% 67%, #000 0 16%, transparent 27%); }
 .ticket-art--scan-landscape .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(circle at 76% 30%, #000 0 15%, transparent 26%); mask-image: radial-gradient(circle at 76% 30%, #000 0 15%, transparent 26%); }
+.ticket-scan-landmark-wheel { transform-origin: 85.5% 32%; -webkit-mask-image: radial-gradient(circle at 85.5% 32%, #000 0 6.2%, transparent 7.1%); mask-image: radial-gradient(circle at 85.5% 32%, #000 0 6.2%, transparent 7.1%); }
+.ticket-scan-landmark-bridge { -webkit-mask-image: linear-gradient(to bottom, transparent 0 58%, #000 63% 86%, transparent 92%); mask-image: linear-gradient(to bottom, transparent 0 58%, #000 63% 86%, transparent 92%); }
 
 @keyframes ticket-ink-drift-a {
   0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 12px) rotate(-.08deg); }
@@ -192,6 +196,14 @@ button { color: inherit; }
 @keyframes ticket-scan-stamp-turn {
   0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 7px) rotate(-1deg) scale(1.003); }
   50% { transform: translate3d(calc(var(--ticket-print-x) - .7px), calc(var(--ticket-print-y) + .5px), 7px) rotate(1.8deg) scale(1.006); }
+}
+@keyframes ticket-landmark-wheel-turn {
+  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 10px) rotate(-1.2deg) scale(1.006); }
+  50% { transform: translate3d(calc(var(--ticket-ink-x) + .2px), calc(var(--ticket-ink-y) - .25px), 10px) rotate(2.6deg) scale(1.008); }
+}
+@keyframes ticket-landmark-bridge-drift {
+  0%, 100% { transform: translate3d(calc(var(--ticket-print-x) - .75px), var(--ticket-print-y), 6px) scale(1.002); }
+  50% { transform: translate3d(calc(var(--ticket-print-x) + .85px), calc(var(--ticket-print-y) - .65px), 6px) scale(1.004); }
 }
 
 .ticket-label { position: absolute; top: calc(100% + 11px); left: 50%; display: flex; gap: 9px; align-items: center; color: rgba(255,255,255,.74); font-size: 11px; white-space: nowrap; opacity: 0; transform: translate(-50%, 6px); transition: opacity 200ms ease-out, transform 200ms ease-out; }

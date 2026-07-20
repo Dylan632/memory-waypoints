@@ -2,7 +2,7 @@ import type { Coordinate } from "./lib/trips.js";
 
 export type TicketVariant = "scenic" | "rail" | "museum" | "cinema" | "scan";
 export type TicketTemplateVariant = Exclude<TicketVariant, "scan">;
-export type TicketMotionPreset = "gentle" | "portrait" | "stamp" | "tilt";
+export type TicketMotionPreset = "gentle" | "portrait" | "stamp" | "landmarks" | "tilt";
 
 export type Ticket = {
   id: string;

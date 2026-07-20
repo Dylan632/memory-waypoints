@@ -12,7 +12,12 @@ export function TicketArtwork({ ticket }: { ticket: TicketData }) {
     const motionPreset = ticket.motionPreset ?? "gentle";
     return <div className={`ticket-art ticket-art--scan ticket-art--scan-${orientation} ticket-art--motion-${motionPreset}`} style={style}>
       <img className="ticket-scan-base" src={scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
-      {motionPreset !== "tilt" && <>
+      {motionPreset === "landmarks" ? <>
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-wheel" src={scanImage} alt="" aria-hidden="true" />
+        <img className="ticket-scan-motion-layer ticket-scan-landmark-bridge" src={scanImage} alt="" aria-hidden="true" />
+        {ticket.foregroundImage && <img className="ticket-scan-motion-layer ticket-scan-motion-layer--a ticket-scan-motion-layer--custom" src={ticket.foregroundImage} alt="" aria-hidden="true" />}
+        {ticket.stampImage && <img className="ticket-scan-motion-layer ticket-scan-motion-layer--b ticket-scan-motion-layer--custom" src={ticket.stampImage} alt="" aria-hidden="true" />}
+      </> : motionPreset !== "tilt" && <>
         <img className={`ticket-scan-motion-layer ticket-scan-motion-layer--a${ticket.foregroundImage ? " ticket-scan-motion-layer--custom" : ""}`} src={ticket.foregroundImage ?? scanImage} alt="" aria-hidden="true" />
         <img className={`ticket-scan-motion-layer ticket-scan-motion-layer--b${ticket.stampImage ? " ticket-scan-motion-layer--custom" : ""}`} src={ticket.stampImage ?? scanImage} alt="" aria-hidden="true" />
       </>}
