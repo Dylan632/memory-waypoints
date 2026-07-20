@@ -3,6 +3,33 @@ import { ticketScanImage, ticketTemplateImage, type Ticket as TicketData } from 
 
 export type TicketSelection = { ticket: TicketData; sourceRect: DOMRect; sourceElement: HTMLButtonElement };
 
+const eastLakeLayers = {
+  background: "/memories/east-lake/east-lake-background.jpg",
+  people: "/memories/east-lake/east-lake-people-static.png",
+  walkerLeft: "/memories/east-lake/east-lake-walker-left.png",
+  walkerLower: "/memories/east-lake/east-lake-walker-lower.png",
+  wheel: "/memories/east-lake/east-lake-wheel.png",
+  wheelStand: "/memories/east-lake/east-lake-wheel-stand.png",
+  copyA: "/memories/east-lake/east-lake-copy-a.png",
+  copyB: "/memories/east-lake/east-lake-copy-b.png",
+  copyC: "/memories/east-lake/east-lake-copy-c.png",
+  copyD: "/memories/east-lake/east-lake-copy-d.png",
+};
+
+function EastLakeLayers() {
+  return <>
+    <img className="ticket-east-lake-layer ticket-east-lake-wheel-stand" src={eastLakeLayers.wheelStand} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-wheel" src={eastLakeLayers.wheel} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-copy-a" src={eastLakeLayers.copyA} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-copy-b" src={eastLakeLayers.copyB} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-copy-c" src={eastLakeLayers.copyC} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-copy-d" src={eastLakeLayers.copyD} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-people" src={eastLakeLayers.people} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-walker-left" src={eastLakeLayers.walkerLeft} alt="" aria-hidden="true" />
+    <img className="ticket-east-lake-layer ticket-east-lake-walker-lower" src={eastLakeLayers.walkerLower} alt="" aria-hidden="true" />
+  </>;
+}
+
 export function TicketArtwork({ ticket }: { ticket: TicketData }) {
   const scanImage = ticketScanImage(ticket);
   const templateImage = ticketTemplateImage(ticket);
@@ -10,9 +37,10 @@ export function TicketArtwork({ ticket }: { ticket: TicketData }) {
   if (ticket.variant === "scan" && scanImage) {
     const orientation = ticket.ratio < 1 ? "portrait" : "landscape";
     const motionPreset = ticket.motionPreset ?? "gentle";
+    const isEastLake = ticket.id === "east-lake-eye-ticket-2021" && motionPreset === "landmarks";
     return <div className={`ticket-art ticket-art--scan ticket-art--scan-${orientation} ticket-art--motion-${motionPreset}`} style={style}>
-      <img className="ticket-scan-base" src={scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
-      {motionPreset === "landmarks" ? <>
+      <img className={`ticket-scan-base${isEastLake ? " ticket-scan-base--east-lake" : ""}`} src={isEastLake ? eastLakeLayers.background : scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
+      {isEastLake ? <EastLakeLayers /> : motionPreset === "landmarks" ? <>
         <img className="ticket-scan-motion-layer ticket-scan-landmark-wheel" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-a" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-b" src={scanImage} alt="" aria-hidden="true" />
@@ -85,8 +113,9 @@ export function Ticket({ ticket, onOpen }: { ticket: TicketData; onOpen: (select
     "--ticket-rotation": `${ticket.rotation}deg`,
     "--ticket-ratio": String(ticket.ratio),
   } as CSSProperties;
+  const isEastLake = ticket.id === "east-lake-eye-ticket-2021" && ticket.motionPreset === "landmarks";
 
-  return <div className="ticket-slot" style={slotStyle}>
+  return <div className={`ticket-slot${isEastLake ? " ticket-slot--east-lake" : ""}`} style={slotStyle}>
     <button
       ref={tiltRef}
       type="button"

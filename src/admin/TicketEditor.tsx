@@ -241,7 +241,7 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
       <details className="admin-layout-details">
         <summary>调整票根位置和大小</summary>
         <div className="admin-slider-grid">
-          <label><span>宽度 <b>{ticket.width}px</b></span><input type="range" min="240" max="560" value={ticket.width} onChange={(event) => update("width", Number(event.target.value))} /></label>
+            <label><span>宽度 <b>{ticket.width}px</b></span><input type="range" min="240" max="1120" value={ticket.width} onChange={(event) => update("width", Number(event.target.value))} /></label>
           <label><span>左右位置 <b>{ticket.offset}px</b></span><input type="range" min="-100" max="100" value={ticket.offset} onChange={(event) => update("offset", Number(event.target.value))} /></label>
           <label><span>旋转 <b>{ticket.rotation}°</b></span><input type="range" min="-4" max="4" step="0.1" value={ticket.rotation} onChange={(event) => update("rotation", Number(event.target.value))} /></label>
         </div>
