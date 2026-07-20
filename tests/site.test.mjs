@@ -88,7 +88,7 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(css, /@keyframes\s+ticket-ink-drift-a/);
   assert.match(css, /@keyframes\s+ticket-print-drift/);
   assert.match(css, /@keyframes\s+ticket-pattern-wander/);
-  assert.match(css, /\.ticket-scan-base:not\(\.ticket-scan-base--east-lake-eye\)\s*\{[^}]*animation:\s*ticket-scan-drift/s);
+  assert.match(css, /\.ticket-scan-base\s*\{[^}]*animation:\s*ticket-scan-drift/s);
   assert.match(css, /@keyframes\s+ticket-scan-portrait-a/);
   assert.match(css, /@keyframes\s+ticket-scan-landscape-b/);
   assert.match(css, /@keyframes\s+ticket-landmark-wheel-turn/);
@@ -101,14 +101,10 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(ticket, /ticket-scan-motion-layer--b/);
   assert.match(ticket, /setProperty\("--ticket-ink-x"/);
   assert.match(ticket, /setProperty\("--ticket-print-x"/);
-  assert.match(ticket, /ticket\.id\s*===\s*"east-lake-eye-ticket-2021"/);
+  assert.match(ticket, /east-lake-eye-ticket-2021"\s*\?\s*"tilt"\s*:\s*ticket\.motionPreset/);
   assert.match(ticket, /east-lake-eye-ticket-2021"\s*\?\s*1040\s*:\s*ticket\.width/);
-  assert.match(css, /@keyframes\s+ticket-east-lake-wheel/);
-  assert.match(css, /@keyframes\s+ticket-east-lake-walk/);
-  assert.match(css, /@keyframes\s+ticket-east-lake-dive/);
-  for (const asset of ["base.png", "copy.png", "wheel.jpg", "yellow-walker.png", "green-diver.png"]) {
-    assert.ok((await readFile(new URL(`../public/memories/east-lake-eye/${asset}`, import.meta.url))).byteLength > 0);
-  }
+  assert.doesNotMatch(ticket, /ticket-east-lake-/);
+  assert.doesNotMatch(css, /ticket-east-lake-/);
 });
 
 test("admin can choose uploaded ticket motion and add optional artwork layers", async () => {

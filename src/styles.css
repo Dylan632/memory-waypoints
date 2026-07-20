@@ -108,7 +108,7 @@ button { color: inherit; }
   .ticket-code { animation: ticket-print-drift 3.2s -1.5s ease-in-out infinite; }
   .ticket-code span:nth-child(2n) { animation: ticket-bar-pulse 2.4s steps(3, end) infinite; transform-origin: center; }
   .ticket-art--scenic .ticket-body, .ticket-art--museum .ticket-body, .ticket-art--cinema .ticket-body { animation: ticket-pattern-wander 4.2s ease-in-out infinite; }
-  .ticket-scan-base:not(.ticket-scan-base--east-lake-eye) { animation: ticket-scan-drift 3.8s ease-in-out infinite; }
+  .ticket-scan-base { animation: ticket-scan-drift 3.8s ease-in-out infinite; }
   .ticket-art--scan-portrait .ticket-scan-motion-layer--a { animation: ticket-scan-portrait-a 3.4s -.7s ease-in-out infinite; }
   .ticket-art--scan-portrait .ticket-scan-motion-layer--b { animation: ticket-scan-portrait-b 3.8s -2s ease-in-out infinite; }
   .ticket-art--scan-landscape .ticket-scan-motion-layer--a { animation: ticket-scan-landscape-a 4.2s -1.4s ease-in-out infinite; }
@@ -124,10 +124,6 @@ button { color: inherit; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-walker-b { animation: ticket-landmark-walk 5.6s -3.8s ease-in-out infinite alternate-reverse; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-a { animation: ticket-scan-landscape-a 3.7s -1.8s ease-in-out infinite; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-b { animation: ticket-scan-landscape-b 4.2s -2.4s ease-in-out infinite; }
-  .ticket-east-lake-copy { animation: ticket-east-lake-copy 3.4s ease-in-out infinite; }
-  .ticket-east-lake-wheel { animation: ticket-east-lake-wheel 20s linear infinite; }
-  .ticket-east-lake-yellow { animation: ticket-east-lake-walk 5.4s ease-in-out infinite alternate; }
-  .ticket-east-lake-green { animation: ticket-east-lake-dive 8s ease-in-out infinite; }
 }
 
 .ticket-art--scenic { background: #dcebf1; }
@@ -161,22 +157,6 @@ button { color: inherit; }
 .ticket-scan-landmark-walker-b { transform-origin: 38.7% 57%; -webkit-mask-image: radial-gradient(ellipse 1.7% 6.3% at 38.7% 57%, #000 0 62%, transparent 100%); mask-image: radial-gradient(ellipse 1.7% 6.3% at 38.7% 57%, #000 0 62%, transparent 100%); }
 .ticket-scan-landmark-sitter-a { transform-origin: 45.5% 61.5%; -webkit-mask-image: radial-gradient(ellipse 2.7% 5.5% at 45.5% 61.5%, #000 0 65%, transparent 100%); mask-image: radial-gradient(ellipse 2.7% 5.5% at 45.5% 61.5%, #000 0 65%, transparent 100%); }
 .ticket-scan-landmark-sitter-b { transform-origin: 55.8% 80.5%; -webkit-mask-image: radial-gradient(ellipse 2.8% 5.5% at 55.8% 80.5%, #000 0 65%, transparent 100%); mask-image: radial-gradient(ellipse 2.8% 5.5% at 55.8% 80.5%, #000 0 65%, transparent 100%); }
-
-.ticket-east-lake-clean { position: absolute; z-index: 1; inset: 0; overflow: hidden; pointer-events: none; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat; }
-.ticket-east-lake-clean img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: fill; }
-.ticket-east-lake-clean--copy { -webkit-mask-image: url("/memories/east-lake-eye/copy.png"); mask-image: url("/memories/east-lake-eye/copy.png"); -webkit-mask-size: 51.827% auto; mask-size: 51.827% auto; -webkit-mask-position: left 9.231% top 6.559%; mask-position: left 9.231% top 6.559%; }
-.ticket-east-lake-clean--copy img { filter: blur(11px) saturate(1.08); transform: scale(1.025); }
-.ticket-east-lake-clean--wheel { -webkit-mask-image: radial-gradient(circle at 72.33% 32.88%, #000 0 4.3%, transparent 4.55%); mask-image: radial-gradient(circle at 72.33% 32.88%, #000 0 4.3%, transparent 4.55%); }
-.ticket-east-lake-clean--wheel img { transform: translateX(7%); }
-.ticket-east-lake-clean--yellow { -webkit-mask-image: url("/memories/east-lake-eye/yellow-walker.png"); mask-image: url("/memories/east-lake-eye/yellow-walker.png"); -webkit-mask-size: 5.244% auto; mask-size: 5.244% auto; -webkit-mask-position: left 47.983% top 67.138%; mask-position: left 47.983% top 67.138%; }
-.ticket-east-lake-clean--yellow img { transform: translateX(3%); }
-.ticket-east-lake-clean--green { -webkit-mask-image: url("/memories/east-lake-eye/green-diver.png"); mask-image: url("/memories/east-lake-eye/green-diver.png"); -webkit-mask-size: 4.595% auto; mask-size: 4.595% auto; -webkit-mask-position: left 6.879% top 47.876%; mask-position: left 6.879% top 47.876%; }
-.ticket-east-lake-clean--green img { transform: translateX(-3%); }
-.ticket-art--east-lake-eye img.ticket-east-lake-layer { position: absolute; z-index: 2; display: block; height: auto; object-fit: contain; pointer-events: none; will-change: transform; }
-.ticket-art--east-lake-eye .ticket-east-lake-copy { left: 9.231%; top: 6.559%; width: 51.827%; transform-origin: 50.25% 48.24%; }
-.ticket-art--east-lake-eye .ticket-east-lake-wheel { left: 67.174%; top: 18.207%; width: 10.276%; clip-path: circle(36% at 50.1% 48.2%); mix-blend-mode: multiply; transform-origin: 50.1% 48.2%; }
-.ticket-art--east-lake-eye .ticket-east-lake-yellow { left: 47.983%; top: 67.138%; width: 5.244%; transform-origin: 48.1% 84.7%; }
-.ticket-art--east-lake-eye .ticket-east-lake-green { left: 6.879%; top: 47.876%; width: 4.595%; transform-origin: 49.1% 84.1%; }
 
 @keyframes ticket-ink-drift-a {
   0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 12px) rotate(-.08deg); }
@@ -241,30 +221,6 @@ button { color: inherit; }
   75% { transform: translate3d(4px, -1.5px, 7px) rotate(.35deg); }
   100% { transform: translate3d(7px, .5px, 7px) rotate(-.5deg); }
 }
-@keyframes ticket-east-lake-copy {
-  0%, 100% { transform: translate3d(-.55px, .15px, 8px) rotate(-.06deg); }
-  48% { transform: translate3d(.6px, -.45px, 8px) rotate(.08deg); }
-  76% { transform: translate3d(-.2px, .4px, 8px) rotate(-.02deg); }
-}
-@keyframes ticket-east-lake-wheel { to { transform: rotate(360deg); } }
-@keyframes ticket-east-lake-walk {
-  0% { transform: translate3d(0, 0, 7px) rotate(-.8deg); }
-  25% { transform: translate3d(45%, -3%, 7px) rotate(.7deg); }
-  50% { transform: translate3d(90%, 0, 7px) rotate(-.7deg); }
-  75% { transform: translate3d(135%, -3%, 7px) rotate(.7deg); }
-  100% { transform: translate3d(180%, 0, 7px) rotate(-.8deg); }
-}
-@keyframes ticket-east-lake-dive {
-  0%, 24% { opacity: 1; transform: translate3d(0, 0, 8px) rotate(0) scale(1); }
-  30% { opacity: 1; transform: translate3d(8%, 3%, 8px) rotate(4deg) scale(1.02, .92); }
-  46% { opacity: 1; transform: translate3d(65%, -38%, 8px) rotate(-18deg) scale(1); }
-  66% { opacity: 1; transform: translate3d(150%, 65%, 8px) rotate(68deg) scale(.96); }
-  74% { opacity: 1; transform: translate3d(175%, 145%, 8px) rotate(94deg) scale(.9); }
-  79%, 88% { opacity: 0; transform: translate3d(185%, 175%, 8px) rotate(100deg) scale(.82); }
-  89% { opacity: 0; transform: translate3d(0, 0, 8px) rotate(0) scale(1); }
-  100% { opacity: 1; transform: translate3d(0, 0, 8px) rotate(0) scale(1); }
-}
-
 .ticket-label { position: absolute; top: calc(100% + 11px); left: 50%; display: flex; gap: 9px; align-items: center; color: rgba(255,255,255,.74); font-size: 11px; white-space: nowrap; opacity: 0; transform: translate(-50%, 6px); transition: opacity 200ms ease-out, transform 200ms ease-out; }
 .ticket-label b { min-width: 18px; height: 18px; padding: 0 5px; display: grid; place-items: center; border-radius: 999px; color: rgba(255,255,255,.8); background: rgba(0,0,0,.38); font-size: 9px; }
 @media (hover: hover) { .ticket-slot:hover .ticket-label { opacity: 1; transform: translate(-50%, 0); } }
