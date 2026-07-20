@@ -115,7 +115,7 @@ function validateTicket(value: unknown, path: string, ticketIds: Set<string>): v
     if (ticket.variant !== "scan") text(ticket[field], `${path}.${field}`);
   }
   color(ticket.accent, `${path}.accent color`);
-  rangedNumber(ticket.width, `${path}.width`, 220, 1120);
+  rangedNumber(ticket.width, `${path}.width`, 220, 700);
   rangedNumber(ticket.ratio, `${path}.ratio`, .5, 5);
   if (ticket.templateRatio !== undefined) rangedNumber(ticket.templateRatio, `${path}.templateRatio`, .5, 5);
   if (ticket.scanRatio !== undefined) rangedNumber(ticket.scanRatio, `${path}.scanRatio`, .5, 5);
