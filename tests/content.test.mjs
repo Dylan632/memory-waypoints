@@ -108,6 +108,14 @@ test("validateTrips rejects empty, unsafe, duplicate, and malformed content", ()
   badSize[0].tickets[0].width = 0;
   assert.throws(() => validateTrips(badSize), /width/i);
 
+  const wideTicket = clone();
+  wideTicket[0].tickets[0].width = 1040;
+  assert.doesNotThrow(() => validateTrips(wideTicket));
+
+  const tooWideTicket = clone();
+  tooWideTicket[0].tickets[0].width = 1121;
+  assert.throws(() => validateTrips(tooWideTicket), /width/i);
+
   const missingScan = clone();
   delete missingScan[0].tickets[0].image;
   assert.throws(() => validateTrips(missingScan), /image/i);
