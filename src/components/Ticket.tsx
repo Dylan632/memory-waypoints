@@ -10,9 +10,20 @@ export function TicketArtwork({ ticket }: { ticket: TicketData }) {
   if (ticket.variant === "scan" && scanImage) {
     const orientation = ticket.ratio < 1 ? "portrait" : "landscape";
     const motionPreset = ticket.motionPreset ?? "gentle";
-    return <div className={`ticket-art ticket-art--scan ticket-art--scan-${orientation} ticket-art--motion-${motionPreset}`} style={style}>
-      <img className="ticket-scan-base" src={scanImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
-      {motionPreset === "landmarks" ? <>
+    const isEastLakeEye = ticket.id === "east-lake-eye-ticket-2021";
+    const baseImage = isEastLakeEye ? "/memories/east-lake-eye/base.png" : scanImage;
+    return <div className={`ticket-art ticket-art--scan ticket-art--scan-${orientation} ticket-art--motion-${motionPreset}${isEastLakeEye ? " ticket-art--east-lake-eye" : ""}`} style={style}>
+      <img className={`ticket-scan-base${isEastLakeEye ? " ticket-scan-base--east-lake-eye" : ""}`} src={baseImage} alt="" width="1200" height={Math.round(1200 / ticket.ratio)} />
+      {isEastLakeEye ? <>
+        <span className="ticket-east-lake-clean ticket-east-lake-clean--copy" aria-hidden="true"><img src={baseImage} alt="" /></span>
+        <span className="ticket-east-lake-clean ticket-east-lake-clean--wheel" aria-hidden="true"><img src={baseImage} alt="" /></span>
+        <span className="ticket-east-lake-clean ticket-east-lake-clean--yellow" aria-hidden="true"><img src={baseImage} alt="" /></span>
+        <span className="ticket-east-lake-clean ticket-east-lake-clean--green" aria-hidden="true"><img src={baseImage} alt="" /></span>
+        <img className="ticket-east-lake-layer ticket-east-lake-copy" src="/memories/east-lake-eye/copy.png" alt="" aria-hidden="true" />
+        <img className="ticket-east-lake-layer ticket-east-lake-wheel" src="/memories/east-lake-eye/wheel.jpg" alt="" aria-hidden="true" />
+        <img className="ticket-east-lake-layer ticket-east-lake-yellow" src="/memories/east-lake-eye/yellow-walker.png" alt="" aria-hidden="true" />
+        <img className="ticket-east-lake-layer ticket-east-lake-green" src="/memories/east-lake-eye/green-diver.png" alt="" aria-hidden="true" />
+      </> : motionPreset === "landmarks" ? <>
         <img className="ticket-scan-motion-layer ticket-scan-landmark-wheel" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-a" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-b" src={scanImage} alt="" aria-hidden="true" />
@@ -80,7 +91,7 @@ export function Ticket({ ticket, onOpen }: { ticket: TicketData; onOpen: (select
   }
 
   const slotStyle = {
-    "--ticket-width": `${ticket.width}px`,
+    "--ticket-width": `${ticket.id === "east-lake-eye-ticket-2021" ? 1040 : ticket.width}px`,
     "--ticket-offset": `${ticket.offset}px`,
     "--ticket-rotation": `${ticket.rotation}deg`,
     "--ticket-ratio": String(ticket.ratio),

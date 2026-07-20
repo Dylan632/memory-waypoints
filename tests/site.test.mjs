@@ -27,12 +27,12 @@ test("production build embeds the official To April player", async () => {
   assert.match(app, /aria-hidden=\{!isOpen\}/);
 });
 
-test("mobile tickets are capped to the viewport and recentered", async () => {
+test("tickets are capped to the viewport and recentered on mobile", async () => {
   const css = await readFile(new URL("../src/styles.css", import.meta.url), "utf8");
   const mobileRules = css.slice(css.indexOf("@media (max-width: 760px)"), css.indexOf("@media (max-width: 430px)"));
 
-  assert.match(mobileRules, /\.ticket-slot\s*\{[^}]*width:\s*min\(var\(--ticket-width\),\s*calc\(100vw - 32px\)\)/s);
-  assert.match(mobileRules, /\.ticket-slot\s*\{[^}]*margin-inline:\s*auto/s);
+  assert.match(css, /\.ticket-slot\s*\{[^}]*width:\s*min\(var\(--ticket-width\),\s*calc\(100vw - 32px\)\)/s);
+  assert.match(mobileRules, /\.ticket-slot\s*\{[^}]*left:\s*0/s);
 });
 
 test("production build includes the private travel editor without replacing the public story", async () => {
@@ -88,7 +88,7 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(css, /@keyframes\s+ticket-ink-drift-a/);
   assert.match(css, /@keyframes\s+ticket-print-drift/);
   assert.match(css, /@keyframes\s+ticket-pattern-wander/);
-  assert.match(css, /\.ticket-scan-base\s*\{[^}]*animation:\s*ticket-scan-drift/s);
+  assert.match(css, /\.ticket-scan-base:not\(\.ticket-scan-base--east-lake-eye\)\s*\{[^}]*animation:\s*ticket-scan-drift/s);
   assert.match(css, /@keyframes\s+ticket-scan-portrait-a/);
   assert.match(css, /@keyframes\s+ticket-scan-landscape-b/);
   assert.match(css, /@keyframes\s+ticket-landmark-wheel-turn/);
@@ -101,6 +101,14 @@ test("ticket ink, artwork and scans have independent restrained motion", async (
   assert.match(ticket, /ticket-scan-motion-layer--b/);
   assert.match(ticket, /setProperty\("--ticket-ink-x"/);
   assert.match(ticket, /setProperty\("--ticket-print-x"/);
+  assert.match(ticket, /ticket\.id\s*===\s*"east-lake-eye-ticket-2021"/);
+  assert.match(ticket, /east-lake-eye-ticket-2021"\s*\?\s*1040\s*:\s*ticket\.width/);
+  assert.match(css, /@keyframes\s+ticket-east-lake-wheel/);
+  assert.match(css, /@keyframes\s+ticket-east-lake-walk/);
+  assert.match(css, /@keyframes\s+ticket-east-lake-dive/);
+  for (const asset of ["base.png", "copy.png", "wheel.jpg", "yellow-walker.png", "green-diver.png"]) {
+    assert.ok((await readFile(new URL(`../public/memories/east-lake-eye/${asset}`, import.meta.url))).byteLength > 0);
+  }
 });
 
 test("admin can choose uploaded ticket motion and add optional artwork layers", async () => {
