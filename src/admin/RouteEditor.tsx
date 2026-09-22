@@ -158,6 +158,7 @@ export function RouteEditor({ route, color, onChange }: RouteEditorProps) {
           <p className="route-editor__eyebrow">旅行轨迹</p>
           <h2 id="route-editor-title" className="route-editor__title">在地图上整理这段路</h2>
           <p className="route-editor__summary" aria-live="polite">当前共 {route.length} 个途经点</p>
+          <p className="route-editor__summary">上传 GPX 或 GeoJSON 会自动画出路线，也可以直接在地图上补点。</p>
         </div>
         <div className="route-editor__actions">
           <label className="route-editor__upload">

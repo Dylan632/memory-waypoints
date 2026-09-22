@@ -1,3 +1,5 @@
+@import "./tokens.css";
+
 :root {
   color: #e8e9e9;
   background: #151719;
@@ -43,7 +45,7 @@ button { color: inherit; }
 .story-scroll.has-dialog { overflow: hidden; }
 .story-scroll::-webkit-scrollbar { width: 7px; }
 .story-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,.28); border-radius: 999px; }
-.story-inner { width: min(var(--stream-width), 100%); min-height: 100%; margin: 0 auto; padding: 20vh 0; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+.story-inner { width: min(var(--stream-width), 100%); min-height: 100%; margin: 0 auto; padding: 14vh 0; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 
 .site-intro { padding: 40px 24px; text-align: center; }
 .intro-index { margin: 0 0 10px; color: rgba(255,255,255,.42); font-size: 9px; font-weight: 700; letter-spacing: .22em; }
@@ -77,38 +79,40 @@ button { color: inherit; }
 .trip-header h2 { margin: 0; color: #fff; font-size: 29px; font-weight: 700; line-height: 1.5; letter-spacing: -.012em; text-shadow: 0 2px 12px rgba(0,0,0,.6); text-wrap: balance; }
 .trip-header p { margin: 0; color: rgba(255,255,255,.58); font-size: 13px; line-height: 1.55; }
 .ticket-stack { display: flex; flex-direction: column; align-items: center; gap: 24px; }
-.trip-transition { height: 60vh; min-height: 360px; }
+.trip-transition { height: 36vh; min-height: 220px; }
 
 .ticket-slot { position: relative; left: var(--ticket-offset); width: min(var(--ticket-width), calc(100vw - 32px)); max-width: calc(100vw - 32px); transform: rotate(var(--ticket-rotation)); filter: drop-shadow(0 13px 18px rgba(0,0,0,.28)); }
 .ticket-button { --ticket-ink-x: 0px; --ticket-ink-y: 0px; --ticket-print-x: 0px; --ticket-print-y: 0px; display: block; width: 100%; aspect-ratio: var(--ticket-ratio); padding: 0; overflow: visible; border: 0; border-radius: 1px; background: transparent; cursor: pointer; transform-style: preserve-3d; will-change: transform; transition: transform 300ms ease-out, filter 180ms ease-out; }
 .ticket-button:active { filter: brightness(.94); }
 .ticket-button:focus-visible { outline: 3px solid rgba(255,255,255,.92); outline-offset: 6px; }
-.ticket-art { position: relative; width: 100%; height: 100%; display: grid; grid-template-columns: 29% 1fr 8%; overflow: hidden; isolation: isolate; color: #182027; background: #f2efe5; text-shadow: none; box-shadow: 0 1px 0 rgba(255,255,255,.65) inset; }
+.ticket-art { container-type: inline-size; position: relative; width: 100%; height: 100%; display: grid; grid-template-columns: 29% 1fr 8%; overflow: hidden; isolation: isolate; color: #182027; background: #f2efe5; text-shadow: none; box-shadow: 0 1px 0 rgba(255,255,255,.65) inset; }
 .ticket-art::before, .ticket-art::after { content: ""; position: absolute; z-index: 3; left: 29%; width: 12px; height: 12px; border-radius: 50%; background: #222; transform: translate(-50%, -50%); }
 .ticket-art::before { top: 0; }.ticket-art::after { top: 100%; }
-.ticket-stub { position: relative; z-index: 1; padding: 9% 8%; display: flex; flex-direction: column; gap: 4px; border-right: 1px dashed rgba(20,30,32,.32); background: color-mix(in oklab, var(--ticket-accent) 15%, #f4f0e5); }
-.ticket-stub small, .ticket-stub span { font: 700 clamp(6px,1vw,10px)/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .02em; }
-.ticket-stub b { margin-top: auto; font-size: clamp(12px,2.2vw,23px); line-height: 1; }
-.ticket-body { position: relative; z-index: 1; padding: 6% 5%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; overflow: hidden; }
-.ticket-kicker { margin-bottom: 7%; font: 700 clamp(6px,.8vw,9px)/1 ui-monospace, monospace; letter-spacing: .12em; opacity: .58; }
-.ticket-body strong { max-width: 100%; font-size: clamp(14px,2.2vw,27px); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; text-align: left; }
-.ticket-body > span { margin-top: 4px; font: 700 clamp(7px,1vw,11px)/1.3 ui-monospace, monospace; letter-spacing: .07em; opacity: .68; }
-.ticket-body i { margin-top: auto; font-style: normal; font-size: 8px; letter-spacing: .45em; color: var(--ticket-accent); }
+.ticket-stub { position: relative; z-index: 1; min-width: 0; padding: 9% 8%; display: flex; flex-direction: column; gap: 4px; border-right: 1px dashed rgba(20,30,32,.32); background: color-mix(in oklab, var(--ticket-accent) 15%, #f4f0e5); }
+.ticket-stub small, .ticket-stub span { font: 700 clamp(7px,1.9cqw,11px)/1.3 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .02em; overflow-wrap: anywhere; }
+.ticket-stub b { margin-top: auto; font-size: clamp(11px,4cqw,24px); line-height: 1.1; overflow-wrap: anywhere; }
+.ticket-body { position: relative; z-index: 1; min-width: 0; min-height: 0; padding: 6% 5%; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; overflow: hidden; }
+.ticket-kicker { margin-bottom: 7%; font: 700 clamp(6px,1.6cqw,10px)/1 ui-monospace, monospace; letter-spacing: .12em; opacity: .58; }
+.ticket-body strong { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; max-width: 100%; overflow: hidden; font-size: clamp(13px,4.6cqw,30px); font-weight: 800; line-height: 1.15; letter-spacing: -.02em; text-align: left; overflow-wrap: anywhere; }
+.ticket-body > span { max-width: 100%; margin-top: 4px; overflow: hidden; font: 700 clamp(7px,2cqw,12px)/1.3 ui-monospace, monospace; letter-spacing: .07em; opacity: .68; overflow-wrap: anywhere; }
+.ticket-body i { margin-top: auto; font-style: normal; font-size: clamp(5px,1.4cqw,9px); letter-spacing: .45em; color: var(--ticket-accent); }
 .ticket-code { display: flex; align-items: stretch; justify-content: center; gap: 3px; padding: 12% 22%; background: rgba(255,255,255,.48); }
 .ticket-code span { width: 2px; background: #1d262b; }.ticket-code span:nth-child(2n) { width: 1px; }.ticket-code span:nth-child(3) { width: 4px; }
 
+/* Pointer parallax: the print shifts with the cursor and settles back.
+   This replaces seven infinite sub-pixel keyframe animations that ran on every
+   template ticket and produced no visible motion. */
+.ticket-stub small, .ticket-stub b, .ticket-stub span,
+.ticket-kicker, .ticket-body strong, .ticket-body > span {
+  transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 10px);
+  transition: transform 260ms ease-out;
+}
+.ticket-body i, .ticket-code, .ticket-scan-base {
+  transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 6px);
+  transition: transform 260ms ease-out;
+}
+
 @media (prefers-reduced-motion: no-preference) {
-  .ticket-stub small { animation: ticket-ink-drift-a 2.7s -1.2s ease-in-out infinite; }
-  .ticket-stub b { animation: ticket-ink-drift-b 3.1s -.4s ease-in-out infinite; }
-  .ticket-stub span { animation: ticket-ink-drift-c 2.9s -2.1s ease-in-out infinite; }
-  .ticket-kicker { animation: ticket-ink-drift-c 3.3s -.8s ease-in-out infinite; }
-  .ticket-body strong { animation: ticket-ink-drift-a 2.8s -1.7s ease-in-out infinite; }
-  .ticket-body > span { animation: ticket-ink-drift-b 3.5s -2.4s ease-in-out infinite; }
-  .ticket-body i { animation: ticket-print-drift 2.6s -.9s ease-in-out infinite; }
-  .ticket-code { animation: ticket-print-drift 3.2s -1.5s ease-in-out infinite; }
-  .ticket-code span:nth-child(2n) { animation: ticket-bar-pulse 2.4s steps(3, end) infinite; transform-origin: center; }
-  .ticket-art--scenic .ticket-body, .ticket-art--museum .ticket-body, .ticket-art--cinema .ticket-body { animation: ticket-pattern-wander 4.2s ease-in-out infinite; }
-  .ticket-scan-base { animation: ticket-scan-drift 3.8s ease-in-out infinite; }
   .ticket-art--scan-portrait .ticket-scan-motion-layer--a { animation: ticket-scan-portrait-a 3.4s -.7s ease-in-out infinite; }
   .ticket-art--scan-portrait .ticket-scan-motion-layer--b { animation: ticket-scan-portrait-b 3.8s -2s ease-in-out infinite; }
   .ticket-art--scan-landscape .ticket-scan-motion-layer--a { animation: ticket-scan-landscape-a 4.2s -1.4s ease-in-out infinite; }
@@ -116,15 +120,10 @@ button { color: inherit; }
   .ticket-art--motion-portrait .ticket-scan-motion-layer--a { animation: ticket-scan-figure-float 3.8s -.8s ease-in-out infinite; }
   .ticket-art--motion-stamp .ticket-scan-motion-layer--b { animation: ticket-scan-stamp-turn 4.1s -1.6s ease-in-out infinite; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-wheel { animation: ticket-landmark-wheel-turn 18s linear infinite; }
-  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-a { animation: ticket-ink-drift-a 2.7s -.9s ease-in-out infinite; }
-  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-b { animation: ticket-ink-drift-b 3.2s -2.1s ease-in-out infinite; }
-  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-c { animation: ticket-ink-drift-c 2.9s -1.6s ease-in-out infinite; }
-  .ticket-art--motion-landmarks .ticket-scan-landmark-copy-d { animation: ticket-print-drift 3.4s -.5s ease-in-out infinite; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-walker-a { animation: ticket-landmark-walk 4.8s -1.1s ease-in-out infinite alternate; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-walker-b { animation: ticket-landmark-walk 5.6s -3.8s ease-in-out infinite alternate-reverse; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-a { animation: ticket-scan-landscape-a 3.7s -1.8s ease-in-out infinite; }
   .ticket-art--motion-landmarks .ticket-scan-landmark-sitter-b { animation: ticket-scan-landscape-b 4.2s -2.4s ease-in-out infinite; }
-  .ticket-art--east-lake-eye .ticket-scan-base { animation: none; }
   .ticket-art--east-lake-eye .ticket-east-lake-wheel { animation: ticket-east-lake-wheel-turn 24s linear infinite; }
   .ticket-art--east-lake-eye .ticket-east-lake-sunlight { animation: ticket-east-lake-sunlight-shimmer 3.8s -1.1s ease-in-out infinite; }
 }
@@ -137,7 +136,7 @@ button { color: inherit; }
 .ticket-art--rail .ticket-body strong { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 500; letter-spacing: .06em; }
 .ticket-art--museum { grid-template-columns: 26% 1fr 7%; color: #2b241b; background: #f4ead4; box-shadow: 0 0 0 5px color-mix(in oklab, var(--ticket-accent) 70%, #fff) inset; }
 .ticket-art--museum::before, .ticket-art--museum::after { left: 26%; }
-.ticket-art--museum .ticket-body { background: radial-gradient(circle at 86% 22%, color-mix(in oklab, var(--ticket-accent) 24%, transparent) 0 20%, transparent 21%); }
+.ticket-art--museum .ticket-body { background: radial-gradient(circle at 93% 14%, color-mix(in oklab, var(--ticket-accent) 20%, transparent) 0 11%, transparent 12%); }
 .ticket-art--museum .ticket-body strong { font-family: Georgia, "Songti SC", serif; font-weight: 600; }
 .ticket-art--cinema { color: #f8ead2; background: var(--ticket-accent); box-shadow: 0 0 0 7px rgba(255,240,210,.12) inset; }
 .ticket-art--cinema .ticket-stub { background: rgba(22,10,8,.18); border-color: rgba(255,255,255,.35); }
@@ -156,59 +155,26 @@ button { color: inherit; }
 .ticket-art--scan-landscape .ticket-scan-motion-layer--a { -webkit-mask-image: radial-gradient(circle at 27% 67%, #000 0 16%, transparent 27%); mask-image: radial-gradient(circle at 27% 67%, #000 0 16%, transparent 27%); }
 .ticket-art--scan-landscape .ticket-scan-motion-layer--b { -webkit-mask-image: radial-gradient(circle at 76% 30%, #000 0 15%, transparent 26%); mask-image: radial-gradient(circle at 76% 30%, #000 0 15%, transparent 26%); }
 .ticket-scan-landmark-wheel { transform-origin: 72.5% 32%; -webkit-mask-image: radial-gradient(circle at 72.5% 32%, #000 0 4.25%, transparent 4.9%); mask-image: radial-gradient(circle at 72.5% 32%, #000 0 4.25%, transparent 4.9%); }
-.ticket-scan-landmark-copy-a { -webkit-mask-image: radial-gradient(ellipse 7% 11% at 16% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 7% 11% at 16% 30%, #000 0 79%, transparent 100%); }
-.ticket-scan-landmark-copy-b { -webkit-mask-image: radial-gradient(ellipse 7% 11% at 28% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 7% 11% at 28% 30%, #000 0 79%, transparent 100%); }
-.ticket-scan-landmark-copy-c { -webkit-mask-image: radial-gradient(ellipse 7% 11% at 41% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 7% 11% at 41% 30%, #000 0 79%, transparent 100%); }
-.ticket-scan-landmark-copy-d { -webkit-mask-image: radial-gradient(ellipse 8% 11% at 54% 30%, #000 0 79%, transparent 100%); mask-image: radial-gradient(ellipse 8% 11% at 54% 30%, #000 0 79%, transparent 100%); }
 .ticket-scan-landmark-walker-a { transform-origin: 9.2% 56.5%; -webkit-mask-image: radial-gradient(ellipse 1.5% 6% at 9.2% 56.5%, #000 0 62%, transparent 100%); mask-image: radial-gradient(ellipse 1.5% 6% at 9.2% 56.5%, #000 0 62%, transparent 100%); }
 .ticket-scan-landmark-walker-b { transform-origin: 38.7% 57%; -webkit-mask-image: radial-gradient(ellipse 1.7% 6.3% at 38.7% 57%, #000 0 62%, transparent 100%); mask-image: radial-gradient(ellipse 1.7% 6.3% at 38.7% 57%, #000 0 62%, transparent 100%); }
 .ticket-scan-landmark-sitter-a { transform-origin: 45.5% 61.5%; -webkit-mask-image: radial-gradient(ellipse 2.7% 5.5% at 45.5% 61.5%, #000 0 65%, transparent 100%); mask-image: radial-gradient(ellipse 2.7% 5.5% at 45.5% 61.5%, #000 0 65%, transparent 100%); }
 .ticket-scan-landmark-sitter-b { transform-origin: 55.8% 80.5%; -webkit-mask-image: radial-gradient(ellipse 2.8% 5.5% at 55.8% 80.5%, #000 0 65%, transparent 100%); mask-image: radial-gradient(ellipse 2.8% 5.5% at 55.8% 80.5%, #000 0 65%, transparent 100%); }
 
-@keyframes ticket-ink-drift-a {
-  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 12px) rotate(-.08deg); }
-  42% { transform: translate3d(calc(var(--ticket-ink-x) + .45px), calc(var(--ticket-ink-y) - .35px), 12px) rotate(.1deg); }
-  71% { transform: translate3d(calc(var(--ticket-ink-x) - .3px), calc(var(--ticket-ink-y) + .28px), 12px) rotate(-.03deg); }
-}
-@keyframes ticket-ink-drift-b {
-  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 10px) rotate(.06deg); }
-  35% { transform: translate3d(calc(var(--ticket-ink-x) - .38px), calc(var(--ticket-ink-y) - .22px), 10px) rotate(-.09deg); }
-  76% { transform: translate3d(calc(var(--ticket-ink-x) + .26px), calc(var(--ticket-ink-y) + .4px), 10px) rotate(.03deg); }
-}
-@keyframes ticket-ink-drift-c {
-  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 8px); }
-  48% { transform: translate3d(calc(var(--ticket-ink-x) + .32px), calc(var(--ticket-ink-y) + .25px), 8px); }
-  81% { transform: translate3d(calc(var(--ticket-ink-x) - .24px), calc(var(--ticket-ink-y) - .34px), 8px); }
-}
-@keyframes ticket-print-drift {
-  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 6px) rotate(-.05deg); }
-  45% { transform: translate3d(calc(var(--ticket-print-x) - .42px), calc(var(--ticket-print-y) + .22px), 6px) rotate(.08deg); }
-  78% { transform: translate3d(calc(var(--ticket-print-x) + .3px), calc(var(--ticket-print-y) - .28px), 6px); }
-}
-@keyframes ticket-bar-pulse { 50% { transform: scaleX(1.18); } }
-@keyframes ticket-pattern-wander {
-  0%, 100% { background-position: 50% 50%; }
-  50% { background-position: calc(50% + 1px) calc(50% - 1px); }
-}
-@keyframes ticket-scan-drift {
-  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 0) scale(1.002); }
-  48% { transform: translate3d(calc(var(--ticket-print-x) + .35px), calc(var(--ticket-print-y) - .3px), 0) scale(1.002); }
-}
 @keyframes ticket-scan-portrait-a {
-  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 4px) rotate(-.08deg) scale(1.002); }
-  50% { transform: translate3d(calc(var(--ticket-ink-x) + 1.2px), calc(var(--ticket-ink-y) - .7px), 4px) rotate(.18deg) scale(1.002); }
+  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 4px) rotate(-.14deg) scale(1.004); }
+  50% { transform: translate3d(calc(var(--ticket-ink-x) + 2.6px), calc(var(--ticket-ink-y) - 1.5px), 4px) rotate(.34deg) scale(1.004); }
 }
 @keyframes ticket-scan-portrait-b {
-  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 3px) rotate(.08deg) scale(1.002); }
-  50% { transform: translate3d(calc(var(--ticket-print-x) - 1px), calc(var(--ticket-print-y) + .55px), 3px) rotate(-.16deg) scale(1.002); }
+  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 3px) rotate(.14deg) scale(1.004); }
+  50% { transform: translate3d(calc(var(--ticket-print-x) - 2.2px), calc(var(--ticket-print-y) + 1.2px), 3px) rotate(-.3deg) scale(1.004); }
 }
 @keyframes ticket-scan-landscape-a {
-  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 4px) rotate(-.12deg) scale(1.002); }
-  50% { transform: translate3d(calc(var(--ticket-ink-x) + .7px), calc(var(--ticket-ink-y) - .45px), 4px) rotate(.32deg) scale(1.002); }
+  0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 4px) rotate(-.2deg) scale(1.004); }
+  50% { transform: translate3d(calc(var(--ticket-ink-x) + 2px), calc(var(--ticket-ink-y) - 1.2px), 4px) rotate(.5deg) scale(1.004); }
 }
 @keyframes ticket-scan-landscape-b {
-  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 3px) rotate(.1deg) scale(1.002); }
-  50% { transform: translate3d(calc(var(--ticket-print-x) - .65px), calc(var(--ticket-print-y) + .4px), 3px) rotate(-.3deg) scale(1.002); }
+  0%, 100% { transform: translate3d(var(--ticket-print-x), var(--ticket-print-y), 3px) rotate(.18deg) scale(1.004); }
+  50% { transform: translate3d(calc(var(--ticket-print-x) - 1.8px), calc(var(--ticket-print-y) + 1.1px), 3px) rotate(-.46deg) scale(1.004); }
 }
 @keyframes ticket-scan-figure-float {
   0%, 100% { transform: translate3d(var(--ticket-ink-x), var(--ticket-ink-y), 8px) scale(1.003); }
@@ -295,7 +261,7 @@ button { color: inherit; }
   .story-scroll::-webkit-scrollbar { width: 4px; }
   .qq-soundtrack { top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
   .music-panel { position: fixed; top: 68px; right: 12px; width: min(340px, calc(100vw - 24px)); }
-  .story-inner { width: 100%; padding: 18vh 0; }
+  .story-inner { width: 100%; padding: 12vh 0; }
   .site-intro { padding: 40px 20px; }
   .intro-index { margin-bottom: 14px; }
   .site-intro h1 { max-width: 320px; margin-inline: auto; font-size: 39px; line-height: 1.35; }
@@ -309,7 +275,7 @@ button { color: inherit; }
   .ticket-slot { left: 0; }
   .ticket-button { will-change: auto; }
   .ticket-label { display: none; }
-  .trip-transition { min-height: 310px; }
+  .trip-transition { min-height: 190px; }
   .story-end { padding-inline: 24px; }.story-end h2 { font-size: 30px; }
   .notebook-backdrop { padding: 0; background: #f3ede1; }
   .notebook-paper { width: 100%; min-height: 100vh; margin: 0; padding: calc(48px + env(safe-area-inset-top)) 20px calc(48px + env(safe-area-inset-bottom)); box-shadow: none; }
@@ -323,7 +289,6 @@ button { color: inherit; }
 }
 
 @media (max-width: 430px) {
-  .ticket-art { font-size: 85%; }
   .polaroid-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 

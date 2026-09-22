@@ -160,42 +160,44 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
 
     <section className="ticket-editor-form" aria-labelledby="ticket-form-title">
       <header>
-        <div><span>票根内容</span><h2 id="ticket-form-title">{ticket.title || "未命名票根"}</h2></div>
+        <div><p className="admin-eyebrow">票根内容</p><h2 id="ticket-form-title">{ticket.title || "未命名票根"}</h2></div>
         <button type="button" className="admin-danger-link" onClick={() => onDelete(ticket.id)}>删除票根</button>
       </header>
 
       <div className="admin-field-grid">
-        <label className="admin-field admin-field--wide"><span>票根标题</span><input value={ticket.title} onChange={(event) => update("title", event.target.value)} maxLength={80} /></label>
-        <label className="admin-field"><span>英文或副标题</span><input value={ticket.subtitle} onChange={(event) => update("subtitle", event.target.value)} maxLength={100} /></label>
-        <label className="admin-field"><span>日期</span><input value={ticket.date} onChange={(event) => update("date", event.target.value)} placeholder="2026.07.13" maxLength={30} /></label>
-        <label className="admin-field"><span>编号</span><input value={ticket.serial} onChange={(event) => update("serial", event.target.value)} maxLength={50} /></label>
-        <label className="admin-field"><span>价格或备注</span><input value={ticket.price} onChange={(event) => update("price", event.target.value)} maxLength={30} /></label>
-        <label className="admin-field admin-field--wide"><span>这段回忆</span><textarea value={ticket.story} onChange={(event) => update("story", event.target.value)} rows={5} maxLength={3000} /></label>
+        <label className="admin-field"><span>票根标题</span><input value={ticket.title} onChange={(event) => update("title", event.target.value)} maxLength={80} /></label>
+        <label className="admin-field admin-field--half"><span>英文或副标题</span><input value={ticket.subtitle} onChange={(event) => update("subtitle", event.target.value)} maxLength={100} /></label>
+        <label className="admin-field admin-field--half admin-field--keep"><span>日期</span><input value={ticket.date} onChange={(event) => update("date", event.target.value)} placeholder="2026.07.13" maxLength={30} /></label>
+        <label className="admin-field admin-field--half"><span>编号</span><input value={ticket.serial} onChange={(event) => update("serial", event.target.value)} maxLength={50} /></label>
+        <label className="admin-field admin-field--half admin-field--keep"><span>价格或备注</span><input value={ticket.price} onChange={(event) => update("price", event.target.value)} maxLength={30} /></label>
+        <label className="admin-field"><span>这段回忆</span><textarea value={ticket.story} onChange={(event) => update("story", event.target.value)} rows={5} maxLength={3000} /></label>
       </div>
 
-      <div className="admin-section-rule" />
-      <div className="ticket-media-row">
-        <div>
-          <span className="admin-label">票根图像</span>
-          <p>{ticket.variant === "scan" ? "当前使用真实票根图片" : ticketScanImage(ticket) ? "图片已保留，可随时切换回来" : "上传后会自动切换为真实票根"}</p>
-        </div>
-        <label className={`admin-upload-button${busy === "ticket" ? " is-busy" : ""}`}>
-          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTicket} disabled={Boolean(busy) || disabled} />
-          {ticketScanImage(ticket) ? "替换票根" : "选择票根图片"}
-        </label>
-      </div>
+      <hr className="admin-rule" />
+      <section className="admin-subsection">
+        <header>
+          <div>
+            <span className="admin-label">票根图像</span>
+            <p>{ticket.variant === "scan" ? "当前使用真实票根图片" : ticketScanImage(ticket) ? "图片已保留，可随时切换回来" : "上传后会自动切换为真实票根"}</p>
+          </div>
+          <label className={`admin-upload-button${busy === "ticket" ? " is-busy" : ""}`}>
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTicket} disabled={Boolean(busy) || disabled} />
+            {ticketScanImage(ticket) ? "替换票根" : "选择票根图片"}
+          </label>
+        </header>
+      </section>
 
-      <div className="admin-field-grid admin-appearance-fields">
-        <label className="admin-field"><span>显示方式</span><select value={ticket.variant === "scan" ? "scan" : "template"} onChange={(event) => onChange(ticket.id, (current) => switchTicketMode(current, event.target.value as "scan" | "template"))}>
+      <div className="admin-field-grid">
+        <label className="admin-field admin-field--third"><span>显示方式</span><select value={ticket.variant === "scan" ? "scan" : "template"} onChange={(event) => onChange(ticket.id, (current) => switchTicketMode(current, event.target.value as "scan" | "template"))}>
           <option value="scan" disabled={!ticketScanImage(ticket)}>真实票根照片</option>
           <option value="template">样式票根</option>
         </select></label>
         {ticket.variant !== "scan" && <>
-          <label className="admin-field"><span>票根样式</span><select value={ticket.variant} onChange={(event) => {
+          <label className="admin-field admin-field--third"><span>票根样式</span><select value={ticket.variant} onChange={(event) => {
             const variant = event.target.value as TicketTemplateVariant;
             onChange(ticket.id, (current) => ({ ...current, variant, templateVariant: variant }));
           }}>{templateVariants.map((variant) => <option key={variant.value} value={variant.value}>{variant.label}</option>)}</select></label>
-          <label className="admin-field"><span>强调色</span><div className="admin-color-field"><input type="color" value={ticket.accent} onChange={(event) => update("accent", event.target.value)} /><code>{ticket.accent}</code></div></label>
+          <label className="admin-field admin-field--third"><span>强调色</span><div className="admin-color-field"><input type="color" value={ticket.accent} onChange={(event) => update("accent", event.target.value)} /><code>{ticket.accent}</code></div></label>
         </>}
       </div>
 
@@ -204,7 +206,7 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
           <span className="admin-label" id="ticket-motion-title">票根动效</span>
           <p>上传后自动生效；选择最接近票面重点的效果即可。</p>
         </div>
-        <label className="admin-field"><span>动效样式</span><select value={ticket.motionPreset ?? "gentle"} onChange={(event) => update("motionPreset", event.target.value as TicketMotionPreset)}>
+        <label className="admin-field admin-field--motion"><span>动效样式</span><select value={ticket.motionPreset ?? "gentle"} onChange={(event) => update("motionPreset", event.target.value as TicketMotionPreset)}>
           {motionPresets.map((preset) => <option key={preset.value} value={preset.value}>{preset.label}</option>)}
         </select></label>
         {ticket.motionPreset === "landmarks" && <p className="admin-field-hint ticket-landmark-hint">已按“东湖之眼”票面校准：摩天轮缓慢转动，两位小人来回走动，停坐的人物只保留很轻的呼吸感。</p>}
@@ -230,13 +232,15 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
         </details>
       </section>}
 
-      {ticket.variant !== "scan" && (ticket.variant === "scenic" || ticket.variant === "cinema" ? <div className="ticket-media-row">
-        <div><span className="admin-label">样式票根背景</span><p>这张照片会嵌在票面里，不会替换整张票根。</p></div>
-        <label className={`admin-upload-button${busy === "background" ? " is-busy" : ""}`}>
-          <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTemplateBackground} disabled={Boolean(busy) || disabled} />
-          {ticketTemplateImage(ticket) ? "替换背景" : "选择背景照片"}
-        </label>
-      </div> : <p className="admin-field-hint">展览票和车票不显示背景照片；如需票面带照片，请选择“风景票”或“电影票”。</p>)}
+      {ticket.variant !== "scan" && (ticket.variant === "scenic" || ticket.variant === "cinema" ? <section className="admin-subsection">
+        <header>
+          <div><span className="admin-label">样式票根背景</span><p>这张照片会嵌在票面里，不会替换整张票根。</p></div>
+          <label className={`admin-upload-button${busy === "background" ? " is-busy" : ""}`}>
+            <input type="file" accept="image/jpeg,image/png,image/webp" onChange={uploadTemplateBackground} disabled={Boolean(busy) || disabled} />
+            {ticketTemplateImage(ticket) ? "替换背景" : "选择背景照片"}
+          </label>
+        </header>
+      </section> : <p className="admin-field-hint">展览票和车票不显示背景照片；如需票面带照片，请选择“风景票”或“电影票”。</p>)}
 
       <details className="admin-layout-details">
         <summary>调整票根位置和大小</summary>
@@ -247,15 +251,16 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
         </div>
       </details>
 
-      <div className="admin-section-rule" />
-      <div className="ticket-photo-header">
-        <div><span className="admin-label">手账照片</span><p>点击票根后，这些照片会按当前顺序展开。</p></div>
-        <label className={`admin-upload-button${busy === "photos" ? " is-busy" : ""}`}>
-          <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={uploadPhotos} disabled={Boolean(busy) || disabled} />
-          添加照片
-        </label>
-      </div>
-      <div className="admin-photo-grid">
+      <hr className="admin-rule" />
+      <section className="admin-subsection">
+        <header>
+          <div><span className="admin-label">手账照片</span><p>点击票根后，这些照片会按当前顺序展开。</p></div>
+          <label className={`admin-upload-button${busy === "photos" ? " is-busy" : ""}`}>
+            <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={uploadPhotos} disabled={Boolean(busy) || disabled} />
+            添加照片
+          </label>
+        </header>
+        <div className="admin-photo-grid">
         {ticket.photos.map((photo, index) => <figure key={photo}>
           <img src={photo} alt={`照片 ${index + 1}`} width="180" height="135" />
           <figcaption>
@@ -265,8 +270,9 @@ export function TicketEditor({ tickets, selectedId, onSelect, onAdd, onChange, o
             <button type="button" aria-label="删除照片" onClick={() => update("photos", ticket.photos.filter((_, itemIndex) => itemIndex !== index))}>×</button>
           </figcaption>
         </figure>)}
-        {!ticket.photos.length && <p className="admin-photo-empty">还没有照片</p>}
-      </div>
+          {!ticket.photos.length && <p className="admin-photo-empty">还没有照片</p>}
+        </div>
+      </section>
       <p className="admin-live-message" aria-live="polite">{message}</p>
     </section>
   </div>;
