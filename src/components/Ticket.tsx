@@ -19,10 +19,6 @@ export function TicketArtwork({ ticket }: { ticket: TicketData }) {
         <img className="ticket-east-lake-sunlight" src={scanImage} alt="" aria-hidden="true" />
       </> : motionPreset === "landmarks" ? <>
         <img className="ticket-scan-motion-layer ticket-scan-landmark-wheel" src={scanImage} alt="" aria-hidden="true" />
-        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-a" src={scanImage} alt="" aria-hidden="true" />
-        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-b" src={scanImage} alt="" aria-hidden="true" />
-        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-c" src={scanImage} alt="" aria-hidden="true" />
-        <img className="ticket-scan-motion-layer ticket-scan-landmark-copy-d" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-walker-a" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-walker-b" src={scanImage} alt="" aria-hidden="true" />
         <img className="ticket-scan-motion-layer ticket-scan-landmark-sitter-a" src={scanImage} alt="" aria-hidden="true" />

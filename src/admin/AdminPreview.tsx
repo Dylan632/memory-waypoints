@@ -52,7 +52,7 @@ export function AdminPreview({ trip, ticket }: { trip: Trip; ticket?: Ticket }) 
 
   return <aside className="admin-preview" aria-label="网站实时预览">
     <header>
-      <div><span>实时预览</span><strong>{trip.destination || "未命名旅行"}</strong></div>
+      <span>实时预览</span>
       <div className="admin-preview-toggle" aria-label="预览尺寸">
         <button type="button" aria-pressed={!phone} onClick={() => setPhone(false)}>桌面</button>
         <button type="button" aria-pressed={phone} onClick={() => setPhone(true)}>手机</button>
