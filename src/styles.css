@@ -1,0 +1,120 @@
+/* Values marked "measured" come from pixel-fitting the original site's
+   1440×900 and 390×844 screenshots. The hero type is the same size on both;
+   phones simply wrap the title. */
+
+:root {
+  --bg: #141414;
+  --fg: #fff;
+  --fg-subtitle: #909090;   /* measured */
+  --fg-meta: #b1b1b1;       /* measured */
+  --fg-icon: #bababa;       /* measured */
+  --fg-idle: #848484;       /* measured */
+  --pill: rgb(255 255 255 / .08);        /* measured: #2d2d2d over the map */
+  --pill-active: rgb(255 255 255 / .15); /* measured: #4b4b4b over the pill */
+  --font: "Inter Variable", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-serif: "Songti SC", "Noto Serif SC", "Source Han Serif SC", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+html { color: var(--fg); background: var(--bg); font-family: var(--font); -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+body { margin: 0; }
+button { font: inherit; color: inherit; touch-action: manipulation; }
+
+.map-stage { position: fixed; inset: 0; z-index: 0; background: var(--bg); }
+
+.story { position: relative; z-index: 1; padding: 0 24px 40vh; text-align: center; }
+
+/* Hero ------------------------------------------------------------------ */
+
+/* measured: title cap top at 232.5px on a 900px viewport and 223px on 844px */
+.hero { padding-top: calc(17vh + 67.5px); }
+.hero h1 { margin: 0; font-size: 39.5px; font-weight: 750; line-height: 1.425; letter-spacing: -.01em; }
+.hero__subtitle { margin: 10.5px 0 0; color: var(--fg-subtitle); font-size: 14px; line-height: 20px; letter-spacing: .01em; }
+.hero__links { height: 20px; margin-top: 17px; display: flex; justify-content: center; gap: 15px; }
+.hero__links a { display: block; color: var(--fg-icon); transition: color 150ms ease-out; }
+.hero__links a:hover { color: var(--fg); }
+.hero__links svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.sort-toggle { width: fit-content; margin: 20.5px auto 0; padding: 3px; display: flex; border-radius: 8px; background: var(--pill); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+.sort-toggle button { padding: 4px 14px; border: 0; border-radius: 6px; color: var(--fg-idle); background: transparent; font-size: 12px; font-weight: 500; line-height: 17px; cursor: pointer; transition: color 150ms ease-out, background-color 150ms ease-out; }
+.sort-toggle button[aria-pressed="true"] { color: var(--fg); background: var(--pill-active); }
+.sort-toggle button:focus-visible, .hero__links a:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+
+/* Chapters -------------------------------------------------------------- */
+
+.chapter { margin-top: 82.5px; }
+/* Breathing room so the map can fly to the next trip on its own. */
+.chapter + .chapter { margin-top: 60vh; }
+.chapter__header h2 { margin: 0; font-size: 29px; font-weight: 650; line-height: 1.4; }
+.chapter__header p { margin: 4px 0 0; color: var(--fg-meta); font-size: 13.5px; line-height: 20px; }
+.chapter__tickets { margin-top: 46px; display: flex; flex-direction: column; align-items: center; gap: 40px; }
+
+/* Tickets --------------------------------------------------------------- */
+
+/* A ticket's print scales with the ticket, never with the window: every size
+   inside a ticket face is in cqw of the ticket's own width. */
+.ticket {
+  width: min(var(--ticket-width), calc(100vw - 62px));
+  aspect-ratio: var(--ticket-ratio);
+  container-type: inline-size;
+  transform: rotate(var(--ticket-rotate));
+  filter: drop-shadow(0 10px 22px rgb(0 0 0 / .4));
+}
+
+.rail-ticket {
+  position: relative;
+  height: 100%;
+  padding: 4.5cqw 6cqw 4cqw;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  overflow: hidden;
+  border-radius: 1.4cqw;
+  color: #16262d;
+  background:
+    repeating-linear-gradient(115deg, rgb(255 255 255 / .22) 0 .5cqw, transparent .5cqw 1.2cqw),
+    linear-gradient(160deg, #e3f1f6, #bcdbe8);
+  text-align: left;
+}
+.rail-ticket__serial { color: #c62f33; font: 600 3.1cqw/1 var(--font-mono); letter-spacing: .04em; }
+.rail-ticket__issuer { position: absolute; top: 4.5cqw; right: 6cqw; font-size: 2.6cqw; opacity: .7; }
+.rail-ticket__route { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 3cqw; }
+.rail-ticket__route > div:last-child { text-align: right; }
+.rail-ticket__route strong { display: block; font-size: 7.4cqw; font-weight: 700; line-height: 1.1; letter-spacing: .06em; }
+.rail-ticket__route small { display: block; margin-top: .6cqw; font-size: 2.6cqw; letter-spacing: .04em; opacity: .75; }
+.rail-ticket__train { display: grid; justify-items: center; gap: .8cqw; font-size: 3.4cqw; font-weight: 600; }
+.rail-ticket__train i { width: 14cqw; height: 1.2cqw; background: linear-gradient(currentColor, currentColor) 0 50% / 100% .25cqw no-repeat; clip-path: polygon(0 40%, 88% 40%, 88% 0, 100% 50%, 88% 100%, 88% 60%, 0 60%); }
+.rail-ticket__meta { display: flex; gap: 6cqw; font-size: 3.4cqw; font-weight: 500; }
+.rail-ticket__price { margin-top: 1.6cqw; display: flex; align-items: baseline; gap: 3cqw; }
+.rail-ticket__price span { font-size: 3.8cqw; font-weight: 700; }
+.rail-ticket__price small { font-size: 2.5cqw; opacity: .7; }
+.rail-ticket__code { position: absolute; right: 6cqw; bottom: 4cqw; width: 13cqw; aspect-ratio: 1; background: repeating-conic-gradient(#16262d 0 25%, transparent 0 50%) 0 0 / 2.6cqw 2.6cqw; opacity: .78; }
+
+.admission-ticket {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 23%;
+  overflow: hidden;
+  border-radius: 1cqw;
+  color: #3b2a1b;
+  background: #f3ead6;
+  text-align: left;
+  /* Semicircle notches cut where the stub tears off. */
+  -webkit-mask: radial-gradient(circle 2.4cqw at 77% 0, #0000 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 2.4cqw at 77% 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+  mask: radial-gradient(circle 2.4cqw at 77% 0, #0000 98%, #000) top / 100% 51% no-repeat, radial-gradient(circle 2.4cqw at 77% 100%, #0000 98%, #000) bottom / 100% 51% no-repeat;
+}
+.admission-ticket__main { position: relative; padding: 6cqw 6cqw 5cqw; display: flex; flex-direction: column; }
+.admission-ticket__kicker { color: #b0362c; font-size: 3cqw; font-weight: 700; letter-spacing: .4em; }
+.admission-ticket__main strong { margin-top: 2.4cqw; font-family: var(--font-serif); font-size: 7.6cqw; font-weight: 700; line-height: 1.15; }
+.admission-ticket__main small { margin-top: 1cqw; font-size: 2.6cqw; letter-spacing: .1em; text-transform: uppercase; opacity: .62; }
+.admission-ticket__main dl { margin: auto 0 0; display: flex; gap: 5cqw; font-size: 2.8cqw; }
+.admission-ticket__main dt { opacity: .55; }
+.admission-ticket__main dd { margin: .6cqw 0 0; font-weight: 600; }
+.admission-ticket__stamp { position: absolute; top: 5cqw; right: 5cqw; width: 12cqw; aspect-ratio: 1; display: grid; place-items: center; border: .5cqw solid rgb(176 54 44 / .7); border-radius: 50%; color: rgb(176 54 44 / .75); font-size: 2.8cqw; font-weight: 700; transform: rotate(-14deg); }
+.admission-ticket__stub { padding: 6cqw 3cqw 5cqw; display: flex; flex-direction: column; justify-content: space-between; align-items: center; border-left: .4cqw dashed rgb(59 42 27 / .35); background: #ebe0c8; }
+.admission-ticket__stub span { font-size: 3cqw; font-weight: 700; line-height: 1.5; text-align: center; }
+.admission-ticket__stub small { font: 1.9cqw/1.2 var(--font-mono); writing-mode: vertical-rl; opacity: .65; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 1ms !important; animation-duration: 1ms !important; }
+}
